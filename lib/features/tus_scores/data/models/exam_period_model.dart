@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tus/features/tus_scores/domain/entities/exam_period.dart';
 
-extension ExamPeriodModel on ExamPeriod {
+class ExamPeriodModel {
   static ExamPeriod fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return ExamPeriod(
@@ -12,11 +12,20 @@ extension ExamPeriodModel on ExamPeriod {
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  static ExamPeriod fromEntity(ExamPeriod entity) {
+    return ExamPeriod(
+      id: entity.id,
+      name: entity.name,
+      startDate: entity.startDate,
+      endDate: entity.endDate,
+    );
+  }
+
+  static Map<String, dynamic> toFirestore(ExamPeriod entity) {
     return {
-      'name': name,
-      'startDate': Timestamp.fromDate(startDate),
-      'endDate': Timestamp.fromDate(endDate),
+      'name': entity.name,
+      'startDate': Timestamp.fromDate(entity.startDate),
+      'endDate': Timestamp.fromDate(entity.endDate),
     };
   }
 } 

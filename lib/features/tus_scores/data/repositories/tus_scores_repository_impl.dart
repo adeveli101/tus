@@ -12,20 +12,24 @@ import 'package:tus/features/tus_scores/domain/entities/placement_prediction.dar
 import 'package:tus/features/tus_scores/domain/entities/user.dart';
 import 'package:tus/features/tus_scores/domain/repositories/tus_scores_repository.dart';
 import 'package:tus/features/tus_scores/domain/services/placement_prediction_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TusScoresRepositoryImpl implements TusScoresRepository {
   final TusScoresRemoteDataSource remoteDataSource;
   final PlacementPredictionService predictionService;
   final Database _database;
   final Connectivity _connectivity;
+  final FirebaseFirestore _firestore;
 
   TusScoresRepositoryImpl({
     required this.remoteDataSource,
     required this.predictionService,
     required Database database,
-    Connectivity? connectivity,
-  }) : _database = database,
-       _connectivity = connectivity ?? Connectivity();
+    required Connectivity connectivity,
+    required FirebaseFirestore firestore,
+  })  : _database = database,
+        _connectivity = connectivity,
+        _firestore = firestore;
 
   Future<bool> get _isConnected async {
     final connectivityResult = await _connectivity.checkConnectivity();
@@ -37,11 +41,9 @@ class TusScoresRepositoryImpl implements TusScoresRepository {
     try {
       if (await _isConnected) {
         final departments = await remoteDataSource.getDepartments(filterParams);
-        // Verileri yerel veritabanına kaydet
         await _saveDepartments(departments);
         return Right(departments);
       } else {
-        // Offline modda yerel veritabanından oku
         final departments = await _getDepartmentsFromLocal(filterParams);
         return Right(departments);
       }
@@ -57,14 +59,21 @@ class TusScoresRepositoryImpl implements TusScoresRepository {
         'departments',
         {
           'id': department.id,
+          'institution': department.institution,
+          'department': department.department,
+          'type': department.type,
+          'year': department.year,
+          'quota': department.quota,
+          'score': department.score.toDouble(),
+          'ranking': department.ranking,
           'name': department.name,
           'university': department.university,
           'faculty': department.faculty,
           'city': department.city,
-          'quota': department.quota,
-          'minScore': department.minScore,
-          'maxScore': department.maxScore,
-          'examPeriod': department.examPeriod.toIso8601String(),
+          'min_score': department.minScore,
+          'max_score': department.maxScore,
+          'exam_period': department.examPeriod,
+          'is_favorite': department.isFavorite ? 1 : 0,
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
@@ -73,23 +82,50 @@ class TusScoresRepositoryImpl implements TusScoresRepository {
   }
 
   Future<List<Department>> _getDepartmentsFromLocal(FilterParams filterParams) async {
+    String? whereClause;
+    List<dynamic>? whereArgs;
+
+    if (filterParams.city != null) {
+      whereClause = 'city = ?';
+      whereArgs = [filterParams.city];
+    }
+    if (filterParams.university != null) {
+      whereClause = whereClause != null ? '$whereClause AND university = ?' : 'university = ?';
+      whereArgs = whereArgs != null ? [...whereArgs, filterParams.university] : [filterParams.university];
+    }
+    if (filterParams.faculty != null) {
+      whereClause = whereClause != null ? '$whereClause AND faculty = ?' : 'faculty = ?';
+      whereArgs = whereArgs != null ? [...whereArgs, filterParams.faculty] : [filterParams.faculty];
+    }
+    if (filterParams.examPeriod != null) {
+      whereClause = whereClause != null ? '$whereClause AND exam_period = ?' : 'exam_period = ?';
+      whereArgs = whereArgs != null ? [...whereArgs, filterParams.examPeriod] : [filterParams.examPeriod];
+    }
+
     final List<Map<String, dynamic>> maps = await _database.query(
       'departments',
-      where: filterParams.city != null ? 'city = ?' : null,
-      whereArgs: filterParams.city != null ? [filterParams.city] : null,
+      where: whereClause,
+      whereArgs: whereArgs,
     );
 
     return List.generate(maps.length, (i) {
       return Department(
         id: maps[i]['id'] as String,
+        institution: maps[i]['institution'] as String,
+        department: maps[i]['department'] as String,
+        type: maps[i]['type'] as String,
+        year: maps[i]['year'] as String,
+        quota: maps[i]['quota'] as String,
+        score: (maps[i]['score'] as double).toDouble(),
+        ranking: maps[i]['ranking'] as int,
         name: maps[i]['name'] as String,
         university: maps[i]['university'] as String,
         faculty: maps[i]['faculty'] as String,
         city: maps[i]['city'] as String,
-        quota: maps[i]['quota'] as int,
-        minScore: maps[i]['minScore'] as double,
-        maxScore: maps[i]['maxScore'] as double,
-        examPeriod: DateTime.parse(maps[i]['examPeriod'] as String),
+        minScore: maps[i]['min_score'] as double,
+        maxScore: maps[i]['max_score'] as double,
+        examPeriod: maps[i]['exam_period'] as String,
+        isFavorite: maps[i]['is_favorite'] == 1,
       );
     });
   }
@@ -127,7 +163,16 @@ class TusScoresRepositoryImpl implements TusScoresRepository {
   @override
   Future<Either<Failure, void>> addDepartment(Department department) async {
     try {
-      await remoteDataSource.addDepartment(department);
+      await _firestore.collection('departments').doc(department.id).set({
+        'institution': department.institution,
+        'department': department.department,
+        'type': department.type,
+        'year': department.year,
+        'quota': department.quota,
+        'score': department.score,
+        'ranking': department.ranking,
+        'is_favorite': department.isFavorite,
+      });
       return const Right(null);
     } catch (e) {
       return const Left(ServerFailure());
@@ -230,6 +275,40 @@ class TusScoresRepositoryImpl implements TusScoresRepository {
   Future<Either<Failure, void>> updateUserScore(String userId, int score, int ranking) async {
     try {
       await remoteDataSource.updateUserScore(userId, score, ranking);
+      return const Right(null);
+    } catch (e) {
+      return const Left(ServerFailure());
+    }
+  }
+
+  Future<Either<Failure, void>> updateDepartment(Department department) async {
+    try {
+      await _firestore.collection('departments').doc(department.id).update({
+        'institution': department.institution,
+        'department': department.department,
+        'type': department.type,
+        'year': department.year,
+        'quota': department.quota,
+        'score': department.score.toDouble(),
+        'ranking': department.ranking,
+        'name': department.name,
+        'university': department.university,
+        'faculty': department.faculty,
+        'city': department.city,
+        'min_score': department.minScore,
+        'max_score': department.maxScore,
+        'exam_period': department.examPeriod,
+        'is_favorite': department.isFavorite,
+      });
+      return const Right(null);
+    } catch (e) {
+      return const Left(ServerFailure());
+    }
+  }
+
+  Future<Either<Failure, void>> deleteDepartment(String id) async {
+    try {
+      await _firestore.collection('departments').doc(id).delete();
       return const Right(null);
     } catch (e) {
       return const Left(ServerFailure());

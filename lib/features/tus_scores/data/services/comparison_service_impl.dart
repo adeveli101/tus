@@ -103,9 +103,9 @@ class ComparisonServiceImpl implements ComparisonService {
     List<Department> departments,
     Map<String, double> differences,
   ) {
-    final baseQuota = departments.first.quota.toDouble();
+    final baseQuota = double.parse(departments.first.quota);
     for (final department in departments) {
-      differences[department.id] = department.quota - baseQuota;
+      differences[department.id] = double.parse(department.quota) - baseQuota;
     }
   }
 

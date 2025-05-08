@@ -1,9 +1,36 @@
+/// Uygulama içindeki tüm route'ları tanımlayan sınıf.
+/// 
+/// Bu sınıf, uygulama içindeki tüm sayfa geçişlerini merkezi olarak yönetir.
+/// Route'ları string yerine sabit değerler olarak tanımlar ve tip güvenliği sağlar.
 class AppRoutes {
-  static const String splash = '/';
-  static const String home = '/home';
-  static const String tusScores = '/tus-scores';
-  static const String departmentDetails = '/department-details';
-  static const String preferenceSimulation = '/preference-simulation';
-  static const String preferenceList = '/preference-list';
+  /// Ana sayfa route'u
+  static const String home = '/';
+  
+  /// Ana uygulama sayfası route'u (bottom navigation bar içeren sayfa)
+  static const String main = '/main';
+  
+  /// Ayarlar sayfası route'u
   static const String settings = '/settings';
+  
+  /// Tercih simülasyonu sayfası route'u
+  static const String preferenceSimulation = '/preference-simulation';
+  
+  /// Bölüm detay sayfası route'u
+  /// 
+  /// [departmentId] parametresi ile bölüm ID'si alır
+  static String departmentDetails(String departmentId) => '/department/$departmentId';
+  
+  /// Tercih detay sayfası route'u
+  /// 
+  /// [preferenceId] parametresi ile tercih ID'si alır
+  static String preferenceDetails(String preferenceId) => '/preference/$preferenceId';
+  
+  /// Çalışma programı sayfası route'u
+  static const String studySchedule = '/study-schedule';
+  
+  /// Profil sayfası route'u
+  static const String profile = '/profile';
+  
+  /// Hata sayfası route'u
+  static const String error = '/error';
 } 

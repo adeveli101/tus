@@ -36,7 +36,7 @@ class TusScoresRemoteDataSourceImpl implements TusScoresRemoteDataSource {
       Query query = _firestore.collection('departments');
 
       if (filterParams.examPeriod != null) {
-        query = query.where('examPeriod', isEqualTo: Timestamp.fromDate(filterParams.examPeriod!));
+        query = query.where('examPeriod', isEqualTo: filterParams.examPeriod);
       }
       if (filterParams.city != null) {
         query = query.where('city', isEqualTo: filterParams.city);

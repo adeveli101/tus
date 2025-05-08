@@ -72,7 +72,7 @@ class ReportGenerationService {
           ),
           _buildInfoRow(
             'Sınav Dönemi',
-            DateFormat('dd.MM.yyyy').format(department.examPeriod),
+            department.examPeriod,
           ),
         ],
       ),

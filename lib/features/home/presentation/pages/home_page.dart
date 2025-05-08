@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tus/config/router/app_routes.dart';
 import 'package:tus/config/theme/app_colors.dart';
 import 'package:tus/config/theme/app_text_styles.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final Function(int) onPageChanged;
+  
+  const HomePage({
+    super.key,
+    required this.onPageChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TUS Hazırlık Asistanı'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.push(AppRoutes.settings),
-          ),
-        ],
-      ),
+      backgroundColor: Colors.transparent,
       body: GridView.count(
         padding: const EdgeInsets.all(16),
         crossAxisCount: 2,
@@ -29,27 +25,25 @@ class HomePage extends StatelessWidget {
             context,
             'TUS Puanları',
             Icons.score,
-            () => context.push(AppRoutes.tusScores),
+            () => onPageChanged(1),
           ),
           _buildMenuItem(
             context,
             'Tercih Simülasyonu',
             Icons.analytics,
-            () => context.push(AppRoutes.preferenceSimulation),
+            () => Navigator.pushNamed(context, AppRoutes.preferenceSimulation),
           ),
           _buildMenuItem(
             context,
             'Tercih Listem',
             Icons.list,
-            () => context.push(AppRoutes.preferenceList),
+            () => onPageChanged(2),
           ),
           _buildMenuItem(
             context,
             'Çalışma Programı',
             Icons.calendar_today,
-            () {
-              // TODO: Implement study schedule
-            },
+            () => Navigator.pushNamed(context, AppRoutes.studySchedule),
           ),
         ],
       ),
@@ -63,24 +57,46 @@ class HomePage extends StatelessWidget {
     VoidCallback onTap,
   ) {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppColors.border),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 48,
-              color: AppColors.primary,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primaryLight,
+                AppColors.primary,
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: AppTextStyles.bodyLarge,
-              textAlign: TextAlign.center,
-            ),
-          ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 48,
+                color: AppColors.textPrimary,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tus/features/tus_scores/domain/entities/department_score.dart';
 
-extension DepartmentScoreModel on DepartmentScore {
+class DepartmentScoreModel {
   static DepartmentScore fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return DepartmentScore(
@@ -13,12 +13,22 @@ extension DepartmentScoreModel on DepartmentScore {
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  static DepartmentScore fromEntity(DepartmentScore entity) {
+    return DepartmentScore(
+      id: entity.id,
+      departmentId: entity.departmentId,
+      score: entity.score,
+      ranking: entity.ranking,
+      examPeriod: entity.examPeriod,
+    );
+  }
+
+  static Map<String, dynamic> toFirestore(DepartmentScore entity) {
     return {
-      'departmentId': departmentId,
-      'score': score,
-      'ranking': ranking,
-      'examPeriod': Timestamp.fromDate(examPeriod),
+      'departmentId': entity.departmentId,
+      'score': entity.score,
+      'ranking': entity.ranking,
+      'examPeriod': Timestamp.fromDate(entity.examPeriod),
     };
   }
 } 

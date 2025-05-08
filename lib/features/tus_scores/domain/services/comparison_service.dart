@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:tus/features/tus_scores/domain/entities/department.dart';
 import 'package:tus/features/tus_scores/domain/entities/department_preference.dart';
 import 'package:tus/features/tus_scores/domain/repositories/tus_scores_repository.dart';

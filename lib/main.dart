@@ -1,24 +1,253 @@
 import 'package:flutter/material.dart';
-import 'package:tus/core/di/injection_container.dart' as di;
+import 'package:flutter/foundation.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tus/core/firebase/firebase_config.dart';
+import 'package:tus/core/providers/app_providers.dart';
 import 'package:tus/core/storage/hive_service.dart';
-import 'package:tus/config/router/app_router.dart';
 import 'package:tus/config/theme/app_theme.dart';
+import 'package:tus/config/router/app_routes.dart';
+import 'package:tus/app_background.dart';
+import 'package:tus/features/splash/presentation/pages/splash_page.dart';
+import 'package:tus/features/home/presentation/pages/home_page.dart';
+import 'package:tus/features/tus_scores/presentation/pages/tus_scores_page.dart';
+import 'package:tus/features/preferences/presentation/pages/preference_list_page.dart';
+import 'package:tus/features/settings/presentation/pages/settings_page.dart';
+import 'package:tus/features/tus_scores/domain/entities/department.dart';
+import 'package:tus/features/tus_scores/presentation/pages/department_details_page.dart';
+import 'package:tus/core/presentation/widgets/app_bottom_nav.dart';
+
+import 'config/theme/app_colors.dart';
+import 'config/theme/app_text_styles.dart';
+import 'core/presentation/pages/error_page.dart';
+
+// Özel sayfa geçiş animasyonları
+class SlidePageRoute<T> extends MaterialPageRoute<T> {
+  SlidePageRoute({required WidgetBuilder builder, RouteSettings? settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    const begin = Offset(1.0, 0.0);
+    const end = Offset.zero;
+    const curve = Curves.easeInOutCubic;
+
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    var offsetAnimation = animation.drive(tween);
+
+    return SlideTransition(position: offsetAnimation, child: child);
+  }
+}
+
+class FadePageRoute<T> extends MaterialPageRoute<T> {
+  FadePageRoute({required WidgetBuilder builder, RouteSettings? settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
+}
+
+class ScalePageRoute<T> extends MaterialPageRoute<T> {
+  ScalePageRoute({required WidgetBuilder builder, RouteSettings? settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return ScaleTransition(
+      scale: animation,
+      child: child,
+    );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  int _currentIndex = 0;
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  String _getAppBarTitle() {
+    switch (_currentIndex) {
+      case 0:
+        return 'Ana Sayfa';
+      case 1:
+        return 'TUS Puanları';
+      case 2:
+        return 'Tercih Listem';
+      default:
+        return '';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.primaryLight,
+          title: Text(
+            _getAppBarTitle(),
+            style: AppTextStyles.titleLarge.copyWith(
+              color: AppColors.textPrimary,
+            ),
+          ),
+          actions: [
+            if (_currentIndex == 0)
+              IconButton(
+                icon: const Icon(Icons.settings, color: AppColors.textPrimary),
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.settings);
+                },
+              ),
+          ],
+        ),
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: _buildPage(),
+        ),
+        bottomNavigationBar: AppBottomNav(
+          currentIndex: _currentIndex,
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPage() {
+    final List<Widget> pages = [
+      HomePage(onPageChanged: _onPageChanged),
+      TusScoresPage(onPageChanged: _onPageChanged),
+      PreferenceListPage(onPageChanged: _onPageChanged),
+      SettingsPage(onPageChanged: _onPageChanged),
+    ];
+
+    return AppBackground(
+      child: Stack(
+        children: [
+          pages[_currentIndex],
+        ],
+      ),
+    );
+  }
+}
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Firebase
-  await FirebaseConfig.initialize();
-  
-  // Initialize Hive
-  final hiveService = di.sl<HiveService>();
-  await hiveService.init();
-  
-  // Initialize dependencies
-  await di.initializeDependencies();
-  
-  runApp(const MyApp());
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    // Initialize Firebase first
+    await FirebaseConfig.initialize();
+    
+    // Initialize core services
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final hiveService = HiveService();
+    await hiveService.init();
+    
+    // Initialize SQLite database
+    final database = await openDatabase(
+      join(await getDatabasesPath(), 'tus_database.db'),
+      onCreate: (db, version) async {
+        // Departments table
+        await db.execute('''
+          CREATE TABLE departments(
+            id TEXT PRIMARY KEY,
+            institution TEXT,
+            department TEXT,
+            type TEXT,
+            year TEXT,
+            quota TEXT,
+            score REAL,
+            ranking INTEGER,
+            name TEXT,
+            university TEXT,
+            faculty TEXT,
+            city TEXT,
+            min_score REAL,
+            max_score REAL,
+            exam_period TEXT,
+            is_favorite INTEGER
+          )
+        ''');
+
+        // Department scores table
+        await db.execute('''
+          CREATE TABLE department_scores(
+            id TEXT PRIMARY KEY,
+            departmentId TEXT,
+            examPeriodId TEXT,
+            scoreType TEXT,
+            minScore REAL,
+            maxScore REAL,
+            averageScore REAL,
+            totalApplications INTEGER,
+            successRate REAL,
+            yearlyTrends TEXT,
+            correlationFactors TEXT,
+            lastUpdated TEXT,
+            FOREIGN KEY (departmentId) REFERENCES departments (id)
+          )
+        ''');
+      },
+      version: 1,
+    );
+    
+    // Initialize connectivity
+    final connectivity = Connectivity();
+    
+    // Initialize Firestore
+    final firestore = FirebaseFirestore.instance;
+    
+    runApp(
+      AppBackground(
+        child: AppProviders(
+          database: database,
+          connectivity: connectivity,
+          firestore: firestore,
+          child: const MyApp(),
+        ),
+      ),
+    );
+  } catch (e) {
+    if (kDebugMode) {
+      print('Uygulama başlatma hatası: $e');
+    }
+    // Hata durumunda da uygulamayı başlat
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -26,12 +255,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'TUS Hazırlık Asistanı',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      routerConfig: router,
+      initialRoute: AppRoutes.home,
+      routes: {
+        AppRoutes.home: (context) => const SplashPage(),
+        AppRoutes.main: (context) => const MainPage(),
+        AppRoutes.settings: (context) => SettingsPage(onPageChanged: (index) {}),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name?.startsWith('/department/') ?? false) {
+          final department = settings.arguments as Department;
+          return ScalePageRoute(
+            builder: (context) => DepartmentDetailsPage(department: department),
+          );
+        }
+        return null;
+      },
     );
   }
 }
@@ -77,6 +320,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar

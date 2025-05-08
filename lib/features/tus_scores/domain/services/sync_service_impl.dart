@@ -7,17 +7,9 @@ import 'package:tus/features/tus_scores/domain/services/comparison_service.dart'
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:tus/core/error/failures.dart';
+import 'package:tus/features/tus_scores/domain/services/sync_service.dart';
 
 import '../entities/filter_params.dart';
-
-abstract class SyncService {
-  Future<void> syncData();
-  Future<void> syncDepartments();
-  Future<void> syncDepartment(String id);
-  Future<void> syncUserPreferences();
-  Future<void> optimizeStorage();
-  Future<void> resolveConflicts();
-}
 
 class SyncServiceImpl implements SyncService {
   final TusScoresRepository _repository;
@@ -174,7 +166,7 @@ class SyncServiceImpl implements SyncService {
   }
 
   @override
-  Future<void> syncUserPreferences() {
+  Future<void> syncUserPreferences() async {
     // Implementation needed
     throw UnimplementedError();
   }

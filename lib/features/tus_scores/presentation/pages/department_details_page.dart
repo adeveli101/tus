@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tus/features/tus_scores/domain/entities/department.dart';
+import 'package:tus/config/theme/app_colors.dart';
+import 'package:tus/config/theme/app_text_styles.dart';
 
 class DepartmentDetailsPage extends StatelessWidget {
   final Department department;
@@ -13,28 +14,33 @@ class DepartmentDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text(department.name),
+        title: Text(department.department),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildInfoCard(
-              title: 'Bölüm Bilgileri',
-              content: {
-                'Üniversite': department.university,
-                'Fakülte': department.faculty,
-                'Şehir': department.city,
-                'Kontenjan': department.quota.toString(),
-                'Minimum Puan': department.minScore.toStringAsFixed(2),
-                'Maximum Puan': department.maxScore.toStringAsFixed(2),
-                'Sınav Dönemi': DateFormat('dd.MM.yyyy').format(department.examPeriod),
-              },
+              title: 'Kurum Bilgileri',
+              children: [
+                _buildInfoRow('Kurum', department.institution),
+                _buildInfoRow('Bölüm', department.department),
+                _buildInfoRow('Tür', department.type),
+                _buildInfoRow('Yıl', department.year),
+              ],
             ),
             const SizedBox(height: 16),
-            _buildScoreChart(),
+            _buildInfoCard(
+              title: 'Kontenjan ve Puan Bilgileri',
+              children: [
+                _buildInfoRow('Kontenjan/Yer', department.quota),
+                _buildInfoRow('Taban Puan', department.score.toString()),
+                _buildInfoRow('Sıralama', department.ranking.toString()),
+              ],
+            ),
           ],
         ),
       ),
@@ -43,71 +49,55 @@ class DepartmentDetailsPage extends StatelessWidget {
 
   Widget _buildInfoCard({
     required String title,
-    required Map<String, String> content,
+    required List<Widget> children,
   }) {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        // ignore: prefer_const_constructors
+        side: BorderSide(color: AppColors.border),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 20,
+              style: AppTextStyles.h3.copyWith(
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 16),
-            ...content.entries.map(
-              (entry) => Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      entry.key,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(entry.value),
-                  ],
-                ),
-              ),
-            ),
+            ...children,
           ],
         ),
       ),
     );
   }
 
-  Widget _buildScoreChart() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Puan Dağılımı',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 200,
-              child: Center(
-                child: Text(
-                  'Min: ${department.minScore.toStringAsFixed(2)} - Max: ${department.maxScore.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
+          ),
+          Text(
+            value,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w500,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,62 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tus/config/router/app_routes.dart';
 import 'package:tus/config/theme/app_colors.dart';
 import 'package:tus/config/theme/app_text_styles.dart';
 
 class ErrorPage extends StatelessWidget {
   final String message;
-  final String? code;
+  final VoidCallback? onRetry;
 
   const ErrorPage({
     super.key,
     required this.message,
-    this.code,
+    this.onRetry,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              message,
+              style: AppTextStyles.bodyLarge.copyWith(
+                color: AppColors.textPrimary,
               ),
-              const SizedBox(height: 16),
-              Text(
-                'Bir hata oluştu',
-                style: AppTextStyles.h2.copyWith(
-                  color: AppColors.error,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                message,
-                style: AppTextStyles.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-              if (code != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  'Hata Kodu: $code',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-              const SizedBox(height: 24),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            if (onRetry != null)
               ElevatedButton(
-                onPressed: () => context.go(AppRoutes.home),
-                child: const Text('Ana Sayfaya Dön'),
+                onPressed: onRetry,
+                child: const Text(
+                  'Tekrar Dene',
+                  style: AppTextStyles.button,
+                ),
               ),
-            ],
-          ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, AppRoutes.home);
+              },
+              child: Text(
+                'Ana Sayfaya Dön',
+                style: AppTextStyles.button.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

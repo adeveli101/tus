@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tus/features/tus_scores/domain/models/department_model.dart';
-import 'package:tus/features/tus_scores/domain/models/department_score_model.dart';
-import 'package:tus/features/tus_scores/domain/models/exam_period_model.dart';
+import 'package:tus/features/tus_scores/data/models/department_model.dart';
+import 'package:tus/features/tus_scores/data/models/department_score_model.dart';
+import 'package:tus/features/tus_scores/data/models/exam_period_model.dart';
+import 'package:tus/features/tus_scores/domain/entities/department.dart';
+import 'package:tus/features/tus_scores/domain/entities/department_score.dart';
+import 'package:tus/features/tus_scores/domain/entities/exam_period.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -196,13 +199,9 @@ class FirebaseService {
   }
 
   // Exam Period methods
-  Future<List<ExamPeriodModel>> getExamPeriods() async {
+  Future<List<ExamPeriod>> getExamPeriods() async {
     try {
-      final querySnapshot = await _examPeriodsCollection
-          .orderBy('year', descending: true)
-          .orderBy('term')
-          .get();
-      
+      final querySnapshot = await _examPeriodsCollection.get();
       return querySnapshot.docs
           .map((doc) => ExamPeriodModel.fromFirestore(doc))
           .toList();
@@ -211,26 +210,18 @@ class FirebaseService {
     }
   }
 
-  // Department methods
-  Future<List<DepartmentModel>> getDepartments({
-    String? city,
-    String? university,
-    String? faculty,
-  }) async {
+  Future<void> addExamPeriod(ExamPeriod examPeriod) async {
     try {
-      Query query = _departmentsCollection;
-      
-      if (city != null) {
-        query = query.where('city', isEqualTo: city);
-      }
-      if (university != null) {
-        query = query.where('universityName', isEqualTo: university);
-      }
-      if (faculty != null) {
-        query = query.where('faculty', isEqualTo: faculty);
-      }
+      await _examPeriodsCollection.add(ExamPeriodModel.toFirestore(examPeriod));
+    } catch (e) {
+      throw Exception('Sınav dönemi eklenemedi: $e');
+    }
+  }
 
-      final querySnapshot = await query.get();
+  // Department methods
+  Future<List<Department>> getDepartments() async {
+    try {
+      final querySnapshot = await _departmentsCollection.get();
       return querySnapshot.docs
           .map((doc) => DepartmentModel.fromFirestore(doc))
           .toList();
@@ -239,26 +230,20 @@ class FirebaseService {
     }
   }
 
-  // Department Score methods
-  Future<List<DepartmentScoreModel>> getDepartmentScores({
-    String? examPeriodId,
-    String? departmentId,
-    String? scoreType,
-  }) async {
+  Future<void> addDepartment(Department department) async {
     try {
-      Query query = _departmentScoresCollection;
-      
-      if (examPeriodId != null) {
-        query = query.where('examPeriodId', isEqualTo: examPeriodId);
-      }
-      if (departmentId != null) {
-        query = query.where('departmentId', isEqualTo: departmentId);
-      }
-      if (scoreType != null) {
-        query = query.where('scoreType', isEqualTo: scoreType);
-      }
+      await _departmentsCollection.add(DepartmentModel.toFirestore(department));
+    } catch (e) {
+      throw Exception('Bölüm eklenemedi: $e');
+    }
+  }
 
-      final querySnapshot = await query.get();
+  // Department Score methods
+  Future<List<DepartmentScore>> getDepartmentScores(String departmentId) async {
+    try {
+      final querySnapshot = await _departmentScoresCollection
+          .where('departmentId', isEqualTo: departmentId)
+          .get();
       return querySnapshot.docs
           .map((doc) => DepartmentScoreModel.fromFirestore(doc))
           .toList();
@@ -267,26 +252,9 @@ class FirebaseService {
     }
   }
 
-  // Admin methods for manual data entry
-  Future<void> addExamPeriod(ExamPeriodModel examPeriod) async {
+  Future<void> addDepartmentScore(DepartmentScore score) async {
     try {
-      await _examPeriodsCollection.doc(examPeriod.id).set(examPeriod.toFirestore());
-    } catch (e) {
-      throw Exception('Sınav dönemi eklenemedi: $e');
-    }
-  }
-
-  Future<void> addDepartment(DepartmentModel department) async {
-    try {
-      await _departmentsCollection.doc(department.id).set(department.toFirestore());
-    } catch (e) {
-      throw Exception('Bölüm eklenemedi: $e');
-    }
-  }
-
-  Future<void> addDepartmentScore(DepartmentScoreModel score) async {
-    try {
-      await _departmentScoresCollection.doc(score.id).set(score.toFirestore());
+      await _departmentScoresCollection.add(DepartmentScoreModel.toFirestore(score));
     } catch (e) {
       throw Exception('Bölüm puanı eklenemedi: $e');
     }

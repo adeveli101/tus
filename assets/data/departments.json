@@ -1,0 +1,136 @@
+{
+  "Dahili Tıp Bilimleri": [
+    {
+      "bolum_adi": "İç Hastalıkları (Dahiliye)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Nöroloji",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Çocuk Sağlığı ve Hastalıkları (Pediatri)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Ruh Sağlığı ve Hastalıkları (Psikiyatri)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Acil Tıp",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Dermatoloji (Cildiye)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Fiziksel Tıp ve Rehabilitasyon (Fizik Tedavi ve Rehabilitasyon - FTR)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Göğüs Hastalıkları",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Halk Sağlığı",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Enfeksiyon Hastalıkları ve Klinik Mikrobiyoloji",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Kardiyoloji",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Nükleer Tıp",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Tıbbi Farmakoloji",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Tıbbi Genetik",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Radyasyon Onkolojisi",
+      "egitim_suresi": "4 yıl"
+    }
+  ],
+  "Cerrahi Tıp Bilimleri": [
+    {
+      "bolum_adi": "Genel Cerrahi",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Beyin ve Sinir Cerrahisi (Nöroşirürji)",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Çocuk Cerrahisi",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Göğüs Cerrahisi",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Kalp ve Damar Cerrahisi",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Kadın Hastalıkları ve Doğum (Jinekoloji ve Obstetrik)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Göz Hastalıkları (Oftalmoloji)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Kulak Burun Boğaz Hastalıkları (KBB)",
+      "egitim_suresi": "4 yıl"
+    },
+    {
+      "bolum_adi": "Ortopedi ve Travmatoloji",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Plastik, Rekonstrüktif ve Estetik Cerrahi",
+      "egitim_suresi": "5 yıl"
+    },
+    {
+      "bolum_adi": "Üroloji",
+      "egitim_suresi": "5 yıl"
+    }
+  ],
+  "Temel Tıp Bilimleri": [
+    {
+      "bolum_adi": "Anatomi",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Biyokimya (Tıbbi Biyokimya)",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Fizyoloji (Tıbbi Fizyoloji)",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Histoloji ve Embriyoloji (Tıbbi Histoloji ve Embriyoloji)",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Mikrobiyoloji (Tıbbi Mikrobiyoloji)",
+      "egitim_suresi": "3 yıl"
+    },
+    {
+      "bolum_adi": "Adli Tıp",
+      "egitim_suresi": "3 yıl"
+    }
+  ]
+} 

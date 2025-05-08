@@ -48,6 +48,49 @@ app.*.map.json
 # Firebase
 google-services.json
 GoogleService-Info.plist
+firebase-debug.log
+.firebase/
+firebase-debug.*.log
+firebase-debug.log.*
+firebase-debug.*.log.*
+.firebaserc
+firebase.json
+firestore.rules
+storage.rules
+database.rules.json
+firestore.indexes.json
+firebase_options.dart
+lib/core/firebase/firebase_config.dart
+remoteconfig.template.json
+.firebase.json
+.firebaserc.json
+firebase-adminsdk.json
+firebase-credentials.json
+firebase-service-account.json
+.runtimeconfig.json
+firebase-export-*/
+firebase-data-*.json
+firebase-backup-*.json
+*firebase-debug.log*
+*firebase-error.log*
+*-firebase-adminsdk-*.json
+.firebase/*.cache
+functions/.runtimeconfig.json
+functions/node_modules/
+functions/lib/
+functions/.env
+functions/.env.*
+functions/firebase-debug.log
+functions/ui-debug.log
+functions/*.log
+functions/coverage/
+functions/.nyc_output/
+.emulators/
+firebase-tools.log
+firebase-hosting.*
+.firebase-config.json
+firebase.indexes.json
+firebase.rules.json
 
 # Local configuration
 .env
@@ -55,11 +98,23 @@ GoogleService-Info.plist
 .env.development
 .env.test
 .env.production
+*.env
+*.env.*
+secrets.json
+key.json
+service-account.json
 
 # Generated files
 *.g.dart
 *.freezed.dart
 *.mocks.dart
+*.config.dart
+*.gr.dart
+*.chopper.dart
+*.inject.summary
+*.inject.dart
+*.gql.dart
+*.graphql.dart
 
 # Coverage
 coverage/
@@ -70,10 +125,35 @@ android/app/debug.keystore
 android/app/release.keystore
 android/key.properties
 android/local.properties
+android/gradle.properties
+android/gradle-wrapper.properties
+android/app/src/main/res/values/secrets.xml
+android/app/src/main/res/values/strings.xml
+android/app/src/main/res/values/colors.xml
+android/app/src/main/res/values/styles.xml
+android/app/src/main/res/values/themes.xml
+android/app/src/main/res/values-night/themes.xml
+android/app/src/main/res/values-night/styles.xml
+android/app/src/main/res/values-night/colors.xml
+android/app/src/main/res/values-night/strings.xml
 
 # iOS specific
 ios/Runner.xcworkspace/
 ios/Podfile.lock
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Runner/GoogleService-Info.plist
+ios/Runner/Info.plist
+ios/Runner/AppDelegate.swift
+ios/Runner/Runner-Bridging-Header.h
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
 ios/Flutter/App.framework
 ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
@@ -85,6 +165,8 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 macos/Flutter/Flutter-Debug.xcconfig
 macos/Flutter/Flutter-Release.xcconfig
 macos/Flutter/Flutter-Profile.xcconfig
+macos/Pods/
+macos/.symlinks/
 
 # Windows specific
 windows/flutter/generated_plugin_registrant.cc
@@ -101,3 +183,62 @@ linux/flutter/generated_plugins.cmake
 *.tmp
 *.temp
 .history/
+*.swp
+*.swo
+*~
+
+# IDE specific
+.idea/
+.vscode/
+*.iml
+*.iws
+.DS_Store
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Build files
+build/
+dist/
+out/
+target/
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Dependencies
+node_modules/
+.pub/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.cursor/
+
+# Debug files
+*.log
+*.log.*
+debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.pid
+*.seed
+*.pid.lock
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
