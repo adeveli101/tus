@@ -1,0 +1,25 @@
+[
+  {
+    "id": "acil_tip",
+    "name": "Acil Tıp",
+    "education_duration": "4",
+    "quotas": [
+      {"period": "2025 Mart", "count": 539},
+      {"period": "2024 Ağustos", "count": 502},
+      {"period": "2024 Mart", "count": 790},
+      {"period": "2023 Eylül", "count": 995}
+    ]
+  },
+  {
+    "id": "adli_tip",
+    "name": "Adli Tıp",
+    "education_duration": "4, 3",
+    "quotas": [
+      {"period": "2025 Mart", "count": 24},
+      {"period": "2024 Ağustos", "count": 21},
+      {"period": "2024 Mart", "count": 39},
+      {"period": "2023 Eylül", "count": 59}
+    ]
+  }
+  // ... diğer branşlar
+] 

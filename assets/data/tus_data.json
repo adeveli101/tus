@@ -1,0 +1,1247 @@
+{
+  "sonTusToplamKontenjanlar": [
+    {
+      "tusDonemi": "2025 Mart",
+      "acilanKontenjanSayisi": 8879
+    },
+    {
+      "tusDonemi": "2024 Ağustos",
+      "acilanKontenjanSayisi": 8114
+    },
+    {
+      "tusDonemi": "2024 Mart",
+      "acilanKontenjanSayisi": 10029
+    },
+    {
+      "tusDonemi": "2023 Eylül",
+      "acilanKontenjanSayisi": 12126
+    },
+    {
+      "tusDonemi": "2023 Nisan",
+      "acilanKontenjanSayisi": 8972
+    },
+    {
+      "tusDonemi": "2022 Eylül",
+      "acilanKontenjanSayisi": 9966
+    },
+    {
+      "tusDonemi": "2022 Mart",
+      "acilanKontenjanSayisi": 12294
+    },
+    {
+      "tusDonemi": "2021 Eylül",
+      "acilanKontenjanSayisi": 6136
+    },
+    {
+      "tusDonemi": "2021 Mart",
+      "acilanKontenjanSayisi": 6310
+    },
+    {
+      "tusDonemi": "2020 Ekim",
+      "acilanKontenjanSayisi": 5977
+    },
+    {
+      "tusDonemi": "2020 Şubat",
+      "acilanKontenjanSayisi": 6153
+    },
+    {
+      "tusDonemi": "2019 Eylül",
+      "acilanKontenjanSayisi": 5449
+    },
+    {
+      "tusDonemi": "2019 Şubat",
+      "acilanKontenjanSayisi": 5462
+    },
+    {
+      "tusDonemi": "2018 Ağustos",
+      "acilanKontenjanSayisi": 4230
+    },
+    {
+      "tusDonemi": "2018 Şubat",
+      "acilanKontenjanSayisi": 4202
+    },
+    {
+      "tusDonemi": "2017 Ağustos",
+      "acilanKontenjanSayisi": 3642
+    },
+    {
+      "tusDonemi": "2017 Nisan",
+      "acilanKontenjanSayisi": 2996
+    },
+    {
+      "tusDonemi": "2016 Eylül",
+      "acilanKontenjanSayisi": 3287
+    }
+  ],
+  "kurumTurlerineGoreKontenjanDetaylari": {
+    "eahKontenjanArtisiYuzde_2017_2021": 250,
+    "eahKontenjan2020Subat": 2156,
+    "eahKontenjanOngoruSonrakiDonemlerOrtalama": "2000-2200",
+    "eahKontenjan2024Agustos": 4269,
+    "eahKontenjan2025Mart": 4670,
+    "yokKontenjan2021Mart": 2913,
+    "yokKontenjan2024Agustos": 392,
+    "yokKontenjan2025Mart": 1653,
+    "sbaKontenjan2024Agustos": 2937,
+    "sbaKontenjan2025Mart": 2142
+  },
+  "sonTusKontenjanKadroTuruDagilimi": [
+    {
+      "kadroTuru": "EAH (Sağlık Bakanlığı)",
+      "kontenjan2025Mart": 4670,
+      "kontenjan2024Agustos": 4269,
+      "kontenjan2021Eylul": 1900,
+      "kontenjan2020Subat": 2156,
+      "kontenjan2018Subat": 1162
+    },
+    {
+      "kadroTuru": "SBA (SB Adına Tıp Fak.)",
+      "kontenjan2025Mart": 2142,
+      "kontenjan2024Agustos": 2937,
+      "kontenjan2021Eylul": 1019,
+      "kontenjan2020Subat": 1030,
+      "kontenjan2018Subat": 847
+    },
+    {
+      "kadroTuru": "YÖK (Tıp Fakülteleri)",
+      "kontenjan2025Mart": 1653,
+      "kontenjan2024Agustos": 392,
+      "kontenjan2021Eylul": 2685,
+      "kontenjan2020Subat": 2450,
+      "kontenjan2018Subat": 1896
+    },
+    {
+      "kadroTuru": "ADL (Adli Tıp Kurumu)",
+      "kontenjan2025Mart": 10,
+      "kontenjan2024Agustos": null,
+      "kontenjan2021Eylul": 3,
+      "kontenjan2020Subat": 10,
+      "kontenjan2018Subat": 5
+    },
+    {
+      "kadroTuru": "MAP (Misafir Askeri P.)",
+      "kontenjan2025Mart": 64,
+      "kontenjan2024Agustos": null,
+      "kontenjan2021Eylul": 3,
+      "kontenjan2020Subat": 136,
+      "kontenjan2018Subat": 28
+    },
+    {
+      "kadroTuru": "YBU (Yabancı Uyruklu)",
+      "kontenjan2025Mart": 222,
+      "kontenjan2024Agustos": null,
+      "kontenjan2021Eylul": 439,
+      "kontenjan2020Subat": 379,
+      "kontenjan2018Subat": 224
+    },
+    {
+      "kadroTuru": "KKTC",
+      "kontenjan2025Mart": 62,
+      "kontenjan2024Agustos": null,
+      "kontenjan2021Eylul": 59,
+      "kontenjan2020Subat": 70,
+      "kontenjan2018Subat": 20
+    },
+    {
+      "kadroTuru": "TOPLAM (Yaklaşık)",
+      "kontenjan2025Mart": 8879,
+      "kontenjan2024Agustos": 8114,
+      "kontenjan2021Eylul": 6136,
+      "kontenjan2020Subat": 6153,
+      "kontenjan2018Subat": 4202
+    }
+  ],
+  "belirliUzmanlikDallariKontenjanDetaylariMart2025": {
+    "aileHekimligi": 2010,
+    "cocukSagligiVeHastaliklari": 845,
+    "icHastaliklari": 526,
+    "acilTip": 539,
+    "deriVeZuhreviHastaliklar": 256,
+    "plastikRekonstruktifVeEstetikCerrahi": 140
+  },
+  "secilmisUzmanlikDallariKontenjanDegisimleri": [
+    {
+      "brans": "Acil Tıp",
+      "kontenjan2025Mart": 539,
+      "kontenjan2024Agustos": 502,
+      "kontenjan2024Mart": 790,
+      "kontenjan2023Eylul": 995,
+      "kontenjan2023Nisan": 793,
+      "kontenjan2022Eylul": 836,
+      "kontenjan2022Mart": 865,
+      "kontenjan2021Eylul": 606
+    },
+    {
+      "brans": "Adli Tıp",
+      "kontenjan2025Mart": 24,
+      "kontenjan2024Agustos": 21,
+      "kontenjan2024Mart": 39,
+      "kontenjan2023Eylul": 59,
+      "kontenjan2023Nisan": 63,
+      "kontenjan2022Eylul": 66,
+      "kontenjan2022Mart": 77,
+      "kontenjan2021Eylul": 26
+    },
+    {
+      "brans": "Aile Hekimliği",
+      "kontenjan2025Mart": 2010,
+      "kontenjan2024Agustos": 2010,
+      "kontenjan2024Mart": 712,
+      "kontenjan2023Eylul": 912,
+      "kontenjan2023Nisan": 625,
+      "kontenjan2022Eylul": 647,
+      "kontenjan2022Mart": 752,
+      "kontenjan2021Eylul": 485
+    },
+    {
+      "brans": "Anesteziyoloji ve Reanimasyon",
+      "kontenjan2025Mart": 398,
+      "kontenjan2024Agustos": 334,
+      "kontenjan2024Mart": 635,
+      "kontenjan2023Eylul": 778,
+      "kontenjan2023Nisan": 574,
+      "kontenjan2022Eylul": 604,
+      "kontenjan2022Mart": 648,
+      "kontenjan2021Eylul": 383
+    },
+    {
+      "brans": "Beyin ve Sinir Cerrahisi",
+      "kontenjan2025Mart": 192,
+      "kontenjan2024Agustos": 143,
+      "kontenjan2024Mart": 142,
+      "kontenjan2023Eylul": 278,
+      "kontenjan2023Nisan": 168,
+      "kontenjan2022Eylul": 183,
+      "kontenjan2022Mart": 279,
+      "kontenjan2021Eylul": 131
+    },
+    {
+      "brans": "Çocuk Sağlığı ve Hastalıkları",
+      "kontenjan2025Mart": 845,
+      "kontenjan2024Agustos": 884,
+      "kontenjan2024Mart": 930,
+      "kontenjan2023Eylul": 1349,
+      "kontenjan2023Nisan": 1104,
+      "kontenjan2022Eylul": 883,
+      "kontenjan2022Mart": 1028,
+      "kontenjan2021Eylul": 752
+    },
+    {
+      "brans": "Deri ve Zührevi Hastalıkları",
+      "kontenjan2025Mart": 256,
+      "kontenjan2024Agustos": 293,
+      "kontenjan2024Mart": 257,
+      "kontenjan2023Eylul": 355,
+      "kontenjan2023Nisan": 249,
+      "kontenjan2022Eylul": 327,
+      "kontenjan2022Mart": 338,
+      "kontenjan2021Eylul": 90
+    },
+    {
+      "brans": "Fiziksel Tıp ve Rehabilitasyon",
+      "kontenjan2025Mart": 114,
+      "kontenjan2024Agustos": 104,
+      "kontenjan2024Mart": 258,
+      "kontenjan2023Eylul": 289,
+      "kontenjan2023Nisan": 163,
+      "kontenjan2022Eylul": 254,
+      "kontenjan2022Mart": 321,
+      "kontenjan2021Eylul": 100
+    },
+    {
+      "brans": "Genel Cerrahi",
+      "kontenjan2025Mart": 407,
+      "kontenjan2024Agustos": 285,
+      "kontenjan2024Mart": 403,
+      "kontenjan2023Eylul": 386,
+      "kontenjan2023Nisan": 388,
+      "kontenjan2022Eylul": 371,
+      "kontenjan2022Mart": 545,
+      "kontenjan2021Eylul": 277
+    },
+    {
+      "brans": "Göğüs Hastalıkları",
+      "kontenjan2025Mart": 202,
+      "kontenjan2024Agustos": 145,
+      "kontenjan2024Mart": 265,
+      "kontenjan2023Eylul": 315,
+      "kontenjan2023Nisan": 240,
+      "kontenjan2022Eylul": 300,
+      "kontenjan2022Mart": 318,
+      "kontenjan2021Eylul": 123
+    },
+    {
+      "brans": "Göz Hastalıkları",
+      "kontenjan2025Mart": 239,
+      "kontenjan2024Agustos": 306,
+      "kontenjan2024Mart": 323,
+      "kontenjan2023Eylul": 306,
+      "kontenjan2023Nisan": 212,
+      "kontenjan2022Eylul": 273,
+      "kontenjan2022Mart": 334,
+      "kontenjan2021Eylul": 130
+    },
+    {
+      "brans": "İç Hastalıkları",
+      "kontenjan2025Mart": 526,
+      "kontenjan2024Agustos": 544,
+      "kontenjan2024Mart": 872,
+      "kontenjan2023Eylul": 1205,
+      "kontenjan2023Nisan": 947,
+      "kontenjan2022Eylul": 915,
+      "kontenjan2022Mart": 979,
+      "kontenjan2021Eylul": 814
+    },
+    {
+      "brans": "Kadın Hastalıkları ve Doğum",
+      "kontenjan2025Mart": 362,
+      "kontenjan2024Agustos": 384,
+      "kontenjan2024Mart": 522,
+      "kontenjan2023Eylul": 605,
+      "kontenjan2023Nisan": 516,
+      "kontenjan2022Eylul": 567,
+      "kontenjan2022Mart": 741,
+      "kontenjan2021Eylul": 358
+    },
+    {
+      "brans": "Kalp ve Damar Cerrahisi",
+      "kontenjan2025Mart": 177,
+      "kontenjan2024Agustos": 115,
+      "kontenjan2024Mart": 128,
+      "kontenjan2023Eylul": 140,
+      "kontenjan2023Nisan": 113,
+      "kontenjan2022Eylul": 170,
+      "kontenjan2022Mart": 204,
+      "kontenjan2021Eylul": 90
+    },
+    {
+      "brans": "Kardiyoloji",
+      "kontenjan2025Mart": 298,
+      "kontenjan2024Agustos": 226,
+      "kontenjan2024Mart": 384,
+      "kontenjan2023Eylul": 407,
+      "kontenjan2023Nisan": 196,
+      "kontenjan2022Eylul": 279,
+      "kontenjan2022Mart": 336,
+      "kontenjan2021Eylul": 105
+    },
+    {
+      "brans": "Kulak, Burun, Boğaz Hastalıkları",
+      "kontenjan2025Mart": 263,
+      "kontenjan2024Agustos": 188,
+      "kontenjan2024Mart": 318,
+      "kontenjan2023Eylul": 338,
+      "kontenjan2023Nisan": 234,
+      "kontenjan2022Eylul": 282,
+      "kontenjan2022Mart": 450,
+      "kontenjan2021Eylul": 101
+    },
+    {
+      "brans": "Nöroloji",
+      "kontenjan2025Mart": 239,
+      "kontenjan2024Agustos": 234,
+      "kontenjan2024Mart": 318,
+      "kontenjan2023Eylul": 423,
+      "kontenjan2023Nisan": 357,
+      "kontenjan2022Eylul": 405,
+      "kontenjan2022Mart": 544,
+      "kontenjan2021Eylul": 98
+    },
+    {
+      "brans": "Ortopedi ve Travmatoloji",
+      "kontenjan2025Mart": 219,
+      "kontenjan2024Agustos": 176,
+      "kontenjan2024Mart": 405,
+      "kontenjan2023Eylul": 346,
+      "kontenjan2023Nisan": 237,
+      "kontenjan2022Eylul": 276,
+      "kontenjan2022Mart": 299,
+      "kontenjan2021Eylul": 158
+    },
+    {
+      "brans": "Plastik, Rekonstrüktif ve Estetik Cerrahi",
+      "kontenjan2025Mart": 140,
+      "kontenjan2024Agustos": 156,
+      "kontenjan2024Mart": 255,
+      "kontenjan2023Eylul": 211,
+      "kontenjan2023Nisan": 155,
+      "kontenjan2022Eylul": 203,
+      "kontenjan2022Mart": 243,
+      "kontenjan2021Eylul": 70
+    },
+    {
+      "brans": "Radyoloji",
+      "kontenjan2025Mart": 288,
+      "kontenjan2024Agustos": 165,
+      "kontenjan2024Mart": 449,
+      "kontenjan2023Eylul": 566,
+      "kontenjan2023Nisan": 397,
+      "kontenjan2022Eylul": 424,
+      "kontenjan2022Mart": 761,
+      "kontenjan2021Eylul": 137
+    },
+    {
+      "brans": "Ruh Sağlığı ve Hastalıkları",
+      "kontenjan2025Mart": 174,
+      "kontenjan2024Agustos": 159,
+      "kontenjan2024Mart": 253,
+      "kontenjan2023Eylul": 335,
+      "kontenjan2023Nisan": 234,
+      "kontenjan2022Eylul": 206,
+      "kontenjan2022Mart": 341,
+      "kontenjan2021Eylul": 151
+    },
+    {
+      "brans": "Tıbbi Patoloji",
+      "kontenjan2025Mart": 126,
+      "kontenjan2024Agustos": 75,
+      "kontenjan2024Mart": 207,
+      "kontenjan2023Eylul": 165,
+      "kontenjan2023Nisan": 64,
+      "kontenjan2022Eylul": 117,
+      "kontenjan2022Mart": 116,
+      "kontenjan2021Eylul": 81
+    },
+    {
+      "brans": "Üroloji",
+      "kontenjan2025Mart": 177,
+      "kontenjan2024Agustos": 96,
+      "kontenjan2024Mart": 211,
+      "kontenjan2023Eylul": 234,
+      "kontenjan2023Nisan": 154,
+      "kontenjan2022Eylul": 220,
+      "kontenjan2022Mart": 265,
+      "kontenjan2021Eylul": 91
+    }
+  ],
+  "gecmisTusPuanAnalizi": {
+    "yokKontenjanPuanAraliklari2022BirinciDonem": [
+      {
+        "brans": "Acil Tıp",
+        "tabanPuan": 48,
+        "tavanPuan": 56
+      },
+      {
+        "brans": "Adli Tıp",
+        "tabanPuan": 63,
+        "tavanPuan": 67
+      },
+      {
+        "brans": "Aile Hekimliği",
+        "tabanPuan": 52,
+        "tavanPuan": 62
+      },
+      {
+        "brans": "Anestezi",
+        "tabanPuan": 39,
+        "tavanPuan": 74
+      },
+      {
+        "brans": "Beyin ve Sinir Cerrahisi",
+        "tabanPuan": 45,
+        "tavanPuan": 71
+      },
+      {
+        "brans": "Pediatri (Çocuk Sağlığı ve Hastalıkları)",
+        "tabanPuan": 45,
+        "tavanPuan": 66
+      },
+      {
+        "brans": "Cildiye (Deri ve Zührevi Hastalıklar)",
+        "tabanPuan": 52,
+        "tavanPuan": 80
+      },
+      {
+        "brans": "Genel Cerrahi",
+        "tabanPuan": 45,
+        "tavanPuan": 62
+      },
+      {
+        "brans": "Göğüs Hastalıkları",
+        "tabanPuan": 45,
+        "tavanPuan": 63
+      },
+      {
+        "brans": "Göz Hastalıkları",
+        "tabanPuan": 48,
+        "tavanPuan": 76
+      },
+      {
+        "brans": "İç Hastalıkları",
+        "tabanPuan": 45,
+        "tavanPuan": 66
+      },
+      {
+        "brans": "Kadın Hastalıkları ve Doğum",
+        "tabanPuan": 45,
+        "tavanPuan": 64
+      },
+      {
+        "brans": "Kalp Damar Cerrahisi",
+        "tabanPuan": 45,
+        "tavanPuan": 64
+      }
+    ],
+    "tahminiPuanAraliklari2024Eylul": [
+      {
+        "brans": "Plastik, Rekonstrüktif ve Estetik Cerrahi",
+        "tahminiTabanPuan": "75+",
+        "tahminiTavanPuan": "85+"
+      },
+      {
+        "brans": "Göz Hastalıkları",
+        "tahminiTabanPuan": "72+",
+        "tahminiTavanPuan": "83+"
+      },
+      {
+        "brans": "Kardiyoloji",
+        "tahminiTabanPuan": "70+",
+        "tahminiTavanPuan": "80+"
+      },
+      {
+        "brans": "Dahiliye (İç Hastalıkları)",
+        "tahminiTabanPuan": "65+",
+        "tahminiTavanPuan": "75+"
+      },
+      {
+        "brans": "Acil Tıp",
+        "tahminiTabanPuan": "55+",
+        "tahminiTavanPuan": "65+"
+      }
+    ],
+    "halkSagligiKarabukUniversitesiYOK2022_1_Donem": {
+      "tabanPuan": 58.8,
+      "tavanPuan": 62.2
+    },
+    "icHastaliklariAntalyaEAH2022_1_Donem": {
+      "tabanPuan": 48.38,
+      "tavanPuan": 61.36
+    }
+  },
+  "aktifTusUzmanlikDallariListesi": {
+    "dahiliTipBilimleri": [
+      "Acil Tıp",
+      "Adli Tıp",
+      "Aile Hekimliği",
+      "Askeri Sağlık Hizmetleri",
+      "Çocuk Sağlığı ve Hastalıkları (Pediatri)",
+      "Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları",
+      "Deri ve Zührevi Hastalıkları (Dermatoloji/Cildiye)",
+      "Enfeksiyon Hastalıkları ve Klinik Mikrobiyoloji",
+      "Fiziksel Tıp ve Rehabilitasyon (FTR)",
+      "Göğüs Hastalıkları",
+      "Halk Sağlığı",
+      "Hava ve Uzay Hekimliği",
+      "İç Hastalıkları (Dahiliye)",
+      "Kardiyoloji",
+      "Nöroloji",
+      "Nükleer Tıp",
+      "Radyasyon Onkolojisi",
+      "Radyoloji",
+      "Ruh Sağlığı ve Hastalıkları (Psikiyatri)",
+      "Spor Hekimliği",
+      "Sualtı Hekimliği ve Hiperbarik Tıp",
+      "Tıbbi Ekoloji ve Hidroklimatoloji",
+      "Tıbbi Farmakoloji",
+      "Tıbbi Genetik"
+    ],
+    "cerrahiTipBilimleri": [
+      "Anesteziyoloji ve Reanimasyon",
+      "Beyin ve Sinir Cerrahisi (Nöroşirürji)",
+      "Çocuk Cerrahisi",
+      "Genel Cerrahi",
+      "Göğüs Cerrahisi",
+      "Göz Hastalıkları (Oftalmoloji)",
+      "Kadın Hastalıkları ve Doğum (Jinekoloji ve Obstetrik)",
+      "Kalp ve Damar Cerrahisi",
+      "Kulak Burun Boğaz Hastalıkları (KBB)",
+      "Ortopedi ve Travmatoloji",
+      "Plastik, Rekonstrüktif ve Estetik Cerrahi",
+      "Üroloji"
+    ],
+    "temelTipBilimleri": [
+      "Anatomi",
+      "Fizyoloji",
+      "Histoloji ve Embriyoloji",
+      "Tıbbi Biyokimya",
+      "Tıbbi Mikrobiyoloji",
+      "Tıbbi Patoloji"
+    ]
+  },
+  "uzmanlikDallariVeEgitimSureleri": [
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Acil Tıp",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Adli Tıp",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Aile Hekimliği",
+      "egitimSuresiYil": "3"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Askeri Sağlık Hizmetleri",
+      "egitimSuresiYil": "3"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Çocuk Sağlığı ve Hastalıkları (Pediatri)",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Deri ve Zührevi Hastalıkları (Dermatoloji)",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Enfeksiyon Hastalıkları ve Klinik Mikrobiyoloji",
+      "egitimSuresiYil": "4 veya 5"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Fiziksel Tıp ve Rehabilitasyon (FTR)",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Göğüs Hastalıkları",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Halk Sağlığı",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Hava ve Uzay Hekimliği",
+      "egitimSuresiYil": "3"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "İç Hastalıkları (Dahiliye)",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Kardiyoloji",
+      "egitimSuresiYil": "4 veya 5"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Nöroloji",
+      "egitimSuresiYil": "4 veya 5"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Nükleer Tıp",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Radyasyon Onkolojisi",
+      "egitimSuresiYil": "4 veya 5"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Radyoloji",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Ruh Sağlığı ve Hastalıkları (Psikiyatri)",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Spor Hekimliği",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Sualtı Hekimliği ve Hiperbarik Tıp",
+      "egitimSuresiYil": "3"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Tıbbi Ekoloji ve Hidroklimatoloji",
+      "egitimSuresiYil": "3"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Tıbbi Farmakoloji",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Dahili Tıp Bilimleri",
+      "uzmanlikDali": "Tıbbi Genetik",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Anesteziyoloji ve Reanimasyon",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Beyin ve Sinir Cerrahisi (Nöroşirürji)",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Çocuk Cerrahisi",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Genel Cerrahi",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Göğüs Cerrahisi",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Göz Hastalıkları (Oftalmoloji)",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Kadın Hastalıkları ve Doğum",
+      "egitimSuresiYil": "4"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Kalp ve Damar Cerrahisi",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Kulak Burun Boğaz Hastalıkları (KBB)",
+      "egitimSuresiYil": "4 veya 5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Ortopedi ve Travmatoloji",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Plastik, Rekonstrüktif ve Estetik Cerrahi",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "uzmanlikDali": "Üroloji",
+      "egitimSuresiYil": "5"
+    },
+    {
+      "kategori": "Temel Tıp Bilimleri",
+      "uzmanlikDali": "Anatomi",
+      "egitimSuresiYil": "3"
+    },
+    {
+      "kategori": "Temel Tıp Bilimleri",
+      "uzmanlikDali": "Fizyoloji (Tıbbi Fizyoloji)",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Temel Tıp Bilimleri",
+      "uzmanlikDali": "Histoloji ve Embriyoloji",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Temel Tıp Bilimleri",
+      "uzmanlikDali": "Tıbbi Biyokimya",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Temel Tıp Bilimleri",
+      "uzmanlikDali": "Tıbbi Mikrobiyoloji",
+      "egitimSuresiYil": "3 veya 4"
+    },
+    {
+      "kategori": "Temel Tıp Bilimleri",
+      "uzmanlikDali": "Tıbbi Patoloji",
+      "egitimSuresiYil": "4"
+    }
+  ],
+  "tusEgitimiVerenUniversiteTipFakulteleriOrnekler": [
+    {
+      "sehir": "Adana",
+      "universiteAdi": "Çukurova Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Afyon",
+      "universiteAdi": "Afyon Kocatepe Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Afyon",
+      "universiteAdi": "Afyonkarahisar Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Ankara",
+      "universiteAdi": "Ankara Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Ankara",
+      "universiteAdi": "Gazi Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Ankara",
+      "universiteAdi": "Hacettepe Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Ankara",
+      "universiteAdi": "Yıldırım Beyazıt Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Ankara",
+      "universiteAdi": "Başkent Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Ankara",
+      "universiteAdi": "Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "sehir": "Antalya",
+      "universiteAdi": "Akdeniz Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Aydın",
+      "universiteAdi": "Aydın Adnan Menderes Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Balıkesir",
+      "universiteAdi": "Balıkesir Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Bolu",
+      "universiteAdi": "Bolu Abant İzzet Baysal Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Bursa",
+      "universiteAdi": "Bursa Uludağ Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Denizli",
+      "universiteAdi": "Pamukkale Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Diyarbakır",
+      "universiteAdi": "Dicle Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Edirne",
+      "universiteAdi": "Trakya Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Elazığ",
+      "universiteAdi": "Fırat Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Erzurum",
+      "universiteAdi": "Atatürk Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Eskişehir",
+      "universiteAdi": "Eskişehir Osmangazi Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Gaziantep",
+      "universiteAdi": "Gaziantep Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Isparta",
+      "universiteAdi": "Süleyman Demirel Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "İstanbul Üniversitesi",
+      "tipFakultesiAdi": "İstanbul Tıp Fakültesi (Çapa)"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "İstanbul Üniversitesi-Cerrahpaşa",
+      "tipFakultesiAdi": "Cerrahpaşa Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Marmara Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Acıbadem Mehmet Ali Aydınlar Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Bezmiâlem Vakıf Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Demiroğlu Bilim Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Yeditepe Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İstanbul",
+      "universiteAdi": "Medipol Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İzmir",
+      "universiteAdi": "Ege Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İzmir",
+      "universiteAdi": "Dokuz Eylül Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "İzmir",
+      "universiteAdi": "Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "İzmir Tıp Fakültesi"
+    },
+    {
+      "sehir": "K.maraş",
+      "universiteAdi": "Kahramanmaraş Sütçü İmam Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Kars",
+      "universiteAdi": "Kafkas Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Kayseri",
+      "universiteAdi": "Erciyes Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Kayseri",
+      "universiteAdi": "Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "Kayseri Tıp Fakültesi"
+    },
+    {
+      "sehir": "Kırıkkale",
+      "universiteAdi": "Kırıkkale Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Kocaeli",
+      "universiteAdi": "Kocaeli Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Konya",
+      "universiteAdi": "Selçuk Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Konya",
+      "universiteAdi": "Necmettin Erbakan Üniversitesi",
+      "tipFakultesiAdi": "Meram Tıp Fakültesi"
+    },
+    {
+      "sehir": "Konya",
+      "universiteAdi": "Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "Konya Tıp Fakültesi"
+    },
+    {
+      "sehir": "Malatya",
+      "universiteAdi": "İnönü Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Manisa",
+      "universiteAdi": "Manisa Celal Bayar Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Mersin",
+      "universiteAdi": "Mersin Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Muğla",
+      "universiteAdi": "Muğla Sıtkı Koçman Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Samsun",
+      "universiteAdi": "Ondokuz Mayıs Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Sivas",
+      "universiteAdi": "Sivas Cumhuriyet Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Şanlıurfa",
+      "universiteAdi": "Harran Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Tekirdağ",
+      "universiteAdi": "Tekirdağ Namık Kemal Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Tokat",
+      "universiteAdi": "Tokat Gaziosmanpaşa Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Trabzon",
+      "universiteAdi": "Karadeniz Teknik Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Trabzon",
+      "universiteAdi": "Sağlık Bilimleri Üniversitesi",
+      "tipFakultesiAdi": "Trabzon Tıp Fakültesi"
+    },
+    {
+      "sehir": "Van",
+      "universiteAdi": "Van Yüzüncü Yıl Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    },
+    {
+      "sehir": "Zonguldak",
+      "universiteAdi": "Zonguldak Bülent Ecevit Üniversitesi",
+      "tipFakultesiAdi": "Tıp Fakültesi"
+    }
+  ],
+  "eahVeSehirHastaneleriOrnekler": [
+    {
+      "il": "Adana",
+      "hastaneAdi": "Adana Şehir Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Adana Tıp Fakültesi"
+    },
+    {
+      "il": "Ankara",
+      "hastaneAdi": "Ankara Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "Ankara",
+      "hastaneAdi": "Ankara Şehir Hastanesi (Bilkent)",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "Ankara",
+      "hastaneAdi": "Etlik Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "Ankara",
+      "hastaneAdi": "Dr. Abdurrahman Yurtaslan Ankara Onkoloji Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "Ankara",
+      "hastaneAdi": "Gülhane Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "Antalya",
+      "hastaneAdi": "Antalya Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Antalya",
+      "hastaneAdi": "Antalya Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "Bursa",
+      "hastaneAdi": "Bursa Yüksek İhtisas Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Bursa Tıp Fakültesi"
+    },
+    {
+      "il": "Bursa",
+      "hastaneAdi": "Bursa Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Bursa Tıp Fakültesi"
+    },
+    {
+      "il": "Diyarbakır",
+      "hastaneAdi": "Diyarbakır Gazi Yaşargil Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Elazığ",
+      "hastaneAdi": "Elazığ Fethi Sekin Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Erzurum",
+      "hastaneAdi": "Erzurum Bölge Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Erzurum Tıp Fakültesi"
+    },
+    {
+      "il": "Eskişehir",
+      "hastaneAdi": "Eskişehir Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Gaziantep",
+      "hastaneAdi": "Gaziantep Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Gülhane Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Bakırköy Dr. Sadi Konuk Eğitim Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Başakşehir Çam ve Sakura Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Haydarpaşa Numune Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Kartal Dr. Lütfi Kırdar Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Uluslararası Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Prof. Dr. Cemil Taşçıoğlu Şehir Hastanesi (Okmeydanı)",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Şişli Hamidiye Etfal Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "İstanbul",
+      "hastaneAdi": "Ümraniye Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "İzmir",
+      "hastaneAdi": "İzmir Tepecik Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "İzmir Tıp Fakültesi"
+    },
+    {
+      "il": "İzmir",
+      "hastaneAdi": "İzmir Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "İzmir Tıp Fakültesi"
+    },
+    {
+      "il": "İzmir",
+      "hastaneAdi": "Dr. Behçet Uz Çocuk Hastalıkları ve Cerrahisi Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "İzmir Tıp Fakültesi"
+    },
+    {
+      "il": "Kayseri",
+      "hastaneAdi": "Kayseri Şehir Hastanesi (Kayseri Eğitim ve Araştırma Hastanesi olarak da geçer)",
+      "afiliyeOlduguFakulte_SBU": "Kayseri Tıp Fakültesi"
+    },
+    {
+      "il": "Kocaeli",
+      "hastaneAdi": "Kocaeli Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Kocaeli",
+      "hastaneAdi": "Kocaeli Derince Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Konya",
+      "hastaneAdi": "Konya Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Mersin",
+      "hastaneAdi": "Mersin Şehir Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Samsun",
+      "hastaneAdi": "Samsun Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Şanlıurfa",
+      "hastaneAdi": "Şanlıurfa Mehmet Akif İnan Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Hamidiye Tıp Fakültesi"
+    },
+    {
+      "il": "Trabzon",
+      "hastaneAdi": "Trabzon Kanuni Eğitim ve Araştırma Hastanesi",
+      "afiliyeOlduguFakulte_SBU": "Trabzon Tıp Fakültesi"
+    }
+  ],
+  "digerKurumlarDetaylari": {
+    "adliTipKurumuAdliTipKontenjan2024_TUS_2_DonemEkYerlestirme": 2
+  },
+  "onemliGozlemlerVeEgilimler": {
+    "mart2024TusIstatistikleri": {
+      "sinavaGirenAdaySayisiYaklasik": 23000,
+      "barajiGecenAdaySayisi": 21000,
+      "acilanUzmanlikKontenjaniYaklasik": 10000,
+      "yerlesenAdayOrani": "Yaklaşık yarısı"
+    },
+    "aileHekimligiKontenjanDegisimi": {
+      "kontenjan2022Eylul": 647,
+      "kontenjan2025Mart": 2010
+    }
+  }
+}

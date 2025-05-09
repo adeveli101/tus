@@ -24,6 +24,7 @@ import 'package:tus/core/presentation/widgets/app_bottom_nav.dart';
 import 'package:tus/core/presentation/pages/error_page.dart';
 import 'package:tus/features/preferences/cubit/preference_list_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tus/features/preferences/presentation/pages/preference_list_home_page.dart';
 
 import 'config/theme/app_colors.dart';
 import 'config/theme/app_text_styles.dart';
@@ -148,10 +149,7 @@ class _MainPageState extends State<MainPage> {
     final List<Widget> pages = [
       HomePage(onPageChanged: _onPageChanged),
       TusScoresPage(onPageChanged: _onPageChanged),
-      BlocProvider(
-        create: (_) => PreferenceListCubit()..loadPreferences(),
-        child: PreferenceListPage(onPageChanged: _onPageChanged),
-      ),
+      PreferenceListHomePage(onPageChanged: _onPageChanged),
       SettingsPage(onPageChanged: _onPageChanged),
     ];
 

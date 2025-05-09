@@ -1,8 +1,11 @@
+// ignore_for_file: unnecessary_cast
+
 import 'package:flutter/material.dart';
 import 'package:tus/config/router/app_routes.dart';
 import 'package:tus/config/theme/app_colors.dart';
 import 'package:tus/config/theme/app_text_styles.dart';
 import 'preference_simulation_results_page.dart';
+import 'package:tus/core/data/tus_data_loader.dart';
 
 class PreferenceSimulationPage extends StatefulWidget {
   const PreferenceSimulationPage({super.key});
@@ -17,11 +20,109 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
   String? _selectedCity;
   String? _selectedInstitutionType;
   String? _selectedQuotaType;
+  String? _selectedUniversity;
+  String? _selectedFaculty;
+  String? _selectedHospital;
+  String? _selectedAffiliatedFaculty;
   final TextEditingController _scoreController = TextEditingController();
   final TextEditingController _rankController = TextEditingController();
+  Map<String, dynamic>? tusData;
+
+  @override
+  void initState() {
+    super.initState();
+    TusDataLoader.loadTusData().then((data) {
+      setState(() {
+        tusData = data;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (tusData == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // Branş listesi
+    final List<String> allBranches = [
+      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+    ];
+
+    // Şehir listesi (üniversite ve hastane şehirlerinin birleşimi, tekrarları kaldır)
+    final Set<String> allCities = {
+      ...tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"].map<String>((u) => u["sehir"] as String),
+      ...tusData!["eahVeSehirHastaneleriOrnekler"].map<String>((h) => h["il"] as String),
+    };
+
+    // Seçili kurum türüne göre şehirler
+    List<String> filteredCities = [];
+    if (_selectedInstitutionType == 'universite') {
+      filteredCities = tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]
+        .map<String>((u) => u["sehir"] as String).toSet().toList();
+    } else if (_selectedInstitutionType == 'eah') {
+      filteredCities = tusData!["eahVeSehirHastaneleriOrnekler"]
+        .map<String>((h) => h["il"] as String).toSet().toList();
+    }
+
+    // Seçili şehir ve kurum türüne göre üniversiteler
+    List<Map<String, dynamic>> filteredUniversities = [];
+    if (_selectedInstitutionType == 'universite' && _selectedCity != null) {
+      filteredUniversities = tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]
+        .where((u) => u["sehir"] == _selectedCity).toList().cast<Map<String, dynamic>>();
+    }
+
+    // Seçili şehir ve kurum türüne göre hastaneler
+    List<Map<String, dynamic>> filteredHospitals = [];
+    if (_selectedInstitutionType == 'eah' && _selectedCity != null) {
+      filteredHospitals = tusData!["eahVeSehirHastaneleriOrnekler"]
+        .where((h) => h["il"] == _selectedCity).toList().cast<Map<String, dynamic>>();
+    }
+
+    // Seçili üniversiteye göre fakülte
+    String? selectedFaculty;
+    if (_selectedUniversity != null) {
+      final uni = filteredUniversities.firstWhere(
+        (u) => u["universiteAdi"] == _selectedUniversity,
+        orElse: () => {},
+      );
+      selectedFaculty = uni["tipFakultesiAdi"] as String?;
+    }
+
+    // Seçili hastaneye göre afiliye fakülte
+    String? selectedAffiliatedFaculty;
+    if (_selectedHospital != null) {
+      final hos = filteredHospitals.firstWhere(
+        (h) => h["hastaneAdi"] == _selectedHospital,
+        orElse: () => {},
+      );
+      selectedAffiliatedFaculty = hos["afiliyeOlduguFakulte_SBU"] as String?;
+    }
+
+    // Seçili branşa göre eğitim süresi
+    String? selectedBranchEducation;
+    if (_selectedBranch != null) {
+      final egitim = (tusData!["uzmanlikDallariVeEgitimSureleri"] as List)
+          .firstWhere((e) => e["uzmanlikDali"] == _selectedBranch, orElse: () => null);
+      selectedBranchEducation = egitim?['egitimSuresiYil'];
+    }
+
+    // Seçili branşa göre dönemsel kontenjanlar
+    Map<String, int> selectedBranchQuotas = {};
+    if (_selectedBranch != null) {
+      final bransObj = (tusData!["secilmisUzmanlikDallariKontenjanDegisimleri"] as List)
+          .firstWhere((e) => e["brans"] == _selectedBranch, orElse: () => null);
+      if (bransObj != null) {
+        bransObj.forEach((key, value) {
+          if (key.startsWith('kontenjan') && value != null) {
+            selectedBranchQuotas[key.replaceFirst('kontenjan', '')] = value;
+          }
+        });
+      }
+    }
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -35,9 +136,7 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.person, color: AppColors.textPrimary),
-            onPressed: () {
-              // TODO: Navigate to profile page
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -61,13 +160,7 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Giriş Parametreleri',
-                        style: AppTextStyles.titleMedium.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('Giriş Parametreleri', style: AppTextStyles.titleMedium.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _scoreController,
@@ -121,7 +214,6 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
               // Filtreleme Seçenekleri
               Card(
                 color: AppColors.surface,
@@ -135,13 +227,7 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Filtreleme Seçenekleri',
-                        style: AppTextStyles.titleMedium.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('Filtreleme Seçenekleri', style: AppTextStyles.titleMedium.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
                         value: _selectedBranch,
@@ -165,14 +251,70 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
                         ),
                         dropdownColor: AppColors.surface,
                         style: const TextStyle(color: AppColors.textPrimary),
-                        items: const [
-                          DropdownMenuItem(value: 'kardiyoloji', child: Text('Kardiyoloji')),
-                          DropdownMenuItem(value: 'radyoloji', child: Text('Radyoloji')),
-                          // TODO: Add more branches
-                        ],
+                        items: allBranches.map((b) => DropdownMenuItem<String>(value: b, child: Text(b))).toList(),
                         onChanged: (value) {
                           setState(() {
                             _selectedBranch = value;
+                          });
+                        },
+                      ),
+                      if (_selectedBranch != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text('Eğitim Süresi: ${selectedBranchEducation ?? '-'} yıl', style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      if (_selectedBranch != null && selectedBranchQuotas.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Dönemsel Kadro Sayıları:', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Table(
+                                columnWidths: const {0: IntrinsicColumnWidth(), 1: IntrinsicColumnWidth()},
+                                children: selectedBranchQuotas.entries.map((entry) => TableRow(children: [
+                                  Padding(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4), child: Text(entry.key, style: const TextStyle(fontSize: 13))),
+                                  Padding(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4), child: Text('${entry.value} kadro', style: const TextStyle(fontSize: 13))),
+                                ])).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<String>(
+                        value: _selectedInstitutionType,
+                        decoration: InputDecoration(
+                          labelText: 'Kurum Türü',
+                          labelStyle: const TextStyle(color: AppColors.textSecondary),
+                          filled: true,
+                          fillColor: AppColors.surface,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: AppColors.primary),
+                          ),
+                        ),
+                        dropdownColor: AppColors.surface,
+                        style: const TextStyle(color: AppColors.textPrimary),
+                        items: const [
+                          DropdownMenuItem(value: 'universite', child: Text('Üniversite Hastanesi')),
+                          DropdownMenuItem(value: 'eah', child: Text('Eğitim ve Araştırma/Şehir Hastanesi')),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedInstitutionType = value;
+                            _selectedCity = null;
+                            _selectedUniversity = null;
+                            _selectedFaculty = null;
+                            _selectedHospital = null;
+                            _selectedAffiliatedFaculty = null;
                           });
                         },
                       ),
@@ -199,51 +341,90 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
                         ),
                         dropdownColor: AppColors.surface,
                         style: const TextStyle(color: AppColors.textPrimary),
-                        items: const [
-                          DropdownMenuItem(value: 'istanbul', child: Text('İstanbul')),
-                          DropdownMenuItem(value: 'ankara', child: Text('Ankara')),
-                          // TODO: Add more cities
-                        ],
+                        items: filteredCities.map((city) => DropdownMenuItem<String>(value: city, child: Text(city))).toList(),
                         onChanged: (value) {
                           setState(() {
                             _selectedCity = value;
+                            _selectedUniversity = null;
+                            _selectedFaculty = null;
+                            _selectedHospital = null;
+                            _selectedAffiliatedFaculty = null;
                           });
                         },
                       ),
                       const SizedBox(height: 16),
-                      DropdownButtonFormField<String>(
-                        value: _selectedInstitutionType,
-                        decoration: InputDecoration(
-                          labelText: 'Kurum Türü',
-                          labelStyle: const TextStyle(color: AppColors.textSecondary),
-                          filled: true,
-                          fillColor: AppColors.surface,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: AppColors.border),
+                      if (_selectedInstitutionType == 'universite' && _selectedCity != null)
+                        DropdownButtonFormField<String>(
+                          value: _selectedUniversity,
+                          decoration: InputDecoration(
+                            labelText: 'Üniversite',
+                            labelStyle: const TextStyle(color: AppColors.textSecondary),
+                            filled: true,
+                            fillColor: AppColors.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: AppColors.primary),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: AppColors.border),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: AppColors.primary),
-                          ),
+                          dropdownColor: AppColors.surface,
+                          style: const TextStyle(color: AppColors.textPrimary),
+                          items: filteredUniversities.map((u) => DropdownMenuItem<String>(value: u['universiteAdi'] as String, child: Text('${u['universiteAdi']} (${u['sehir']})'))).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedUniversity = value;
+                              _selectedFaculty = selectedFaculty;
+                            });
+                          },
                         ),
-                        dropdownColor: AppColors.surface,
-                        style: const TextStyle(color: AppColors.textPrimary),
-                        items: const [
-                          DropdownMenuItem(value: 'universite', child: Text('Üniversite Hastanesi')),
-                          DropdownMenuItem(value: 'egitim', child: Text('Eğitim ve Araştırma Hastanesi')),
-                          // TODO: Add more institution types
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedInstitutionType = value;
-                          });
-                        },
-                      ),
+                      if (_selectedInstitutionType == 'universite' && _selectedUniversity != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text('Fakülte: ${selectedFaculty ?? ''}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      if (_selectedInstitutionType == 'eah' && _selectedCity != null)
+                        DropdownButtonFormField<String>(
+                          value: _selectedHospital,
+                          decoration: InputDecoration(
+                            labelText: 'Hastane',
+                            labelStyle: const TextStyle(color: AppColors.textSecondary),
+                            filled: true,
+                            fillColor: AppColors.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: AppColors.primary),
+                            ),
+                          ),
+                          dropdownColor: AppColors.surface,
+                          style: const TextStyle(color: AppColors.textPrimary),
+                          items: filteredHospitals.map((h) => DropdownMenuItem<String>(value: h['hastaneAdi'] as String, child: Text('${h['hastaneAdi']} (${h['il']})'))).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedHospital = value;
+                              _selectedAffiliatedFaculty = selectedAffiliatedFaculty;
+                            });
+                          },
+                        ),
+                      if (_selectedInstitutionType == 'eah' && _selectedHospital != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text('Afiliye Fakülte: ${selectedAffiliatedFaculty ?? ''}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
                         value: _selectedQuotaType,
@@ -283,11 +464,11 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
                 ),
               ),
               const SizedBox(height: 24),
-
               // Simülasyonu Başlat Butonu
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    // Burada filtrelenmiş verilerle bir sonraki sayfaya geçilebilir
                     Navigator.push(
                       context,
                       MaterialPageRoute(

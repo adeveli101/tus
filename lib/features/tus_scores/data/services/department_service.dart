@@ -4,6 +4,7 @@ import 'package:tus/features/tus_scores/domain/entities/department.dart';
 import 'package:tus/features/tus_scores/domain/entities/department_category.dart';
 import 'package:tus/features/tus_scores/domain/entities/filter_params.dart';
 import 'package:tus/features/tus_scores/domain/repositories/tus_scores_repository.dart';
+import 'package:tus/core/data/tus_data_loader.dart';
 
 abstract class DepartmentService {
   Future<List<Department>> getAllDepartments();
@@ -12,6 +13,10 @@ abstract class DepartmentService {
   Future<List<Department>> getDepartmentsByScoreRange(double minScore, double maxScore);
   Future<List<Department>> getDepartmentsByRankingRange(int minRanking, int maxRanking);
   Future<List<Department>> searchDepartments(String query);
+  Future<List<String>> getAllBranches();
+  Future<List<dynamic>> getQuotaChangesForBranch(String branch);
+  Future<List<dynamic>> getUniversities();
+  Future<List<dynamic>> getHospitals();
 }
 
 class DepartmentServiceImpl implements DepartmentService {
@@ -67,6 +72,35 @@ class DepartmentServiceImpl implements DepartmentService {
       return d.department.toLowerCase().contains(lowercaseQuery) ||
           d.institution.toLowerCase().contains(lowercaseQuery);
     }).toList();
+  }
+
+  @override
+  Future<List<String>> getAllBranches() async {
+    final tusData = await TusDataLoader.loadTusData();
+    return [
+      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+    ];
+  }
+
+  @override
+  Future<List<dynamic>> getQuotaChangesForBranch(String branch) async {
+    final tusData = await TusDataLoader.loadTusData();
+    final List<dynamic> changes = tusData["secilmisUzmanlikDallariKontenjanDegisimleri"];
+    return changes.where((e) => e["brans"] == branch).toList();
+  }
+
+  @override
+  Future<List<dynamic>> getUniversities() async {
+    final tusData = await TusDataLoader.loadTusData();
+    return tusData["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"];
+  }
+
+  @override
+  Future<List<dynamic>> getHospitals() async {
+    final tusData = await TusDataLoader.loadTusData();
+    return tusData["eahVeSehirHastaneleriOrnekler"];
   }
 }
 
