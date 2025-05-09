@@ -15,10 +15,6 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryLight,
-        title: const Text('Ayarlar'),
-      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -55,10 +51,10 @@ class SettingsPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: 3,
-        onPageChanged: onPageChanged,
-      ),
+      // bottomNavigationBar: AppBottomNav(
+      //   currentIndex: 3,
+      //   onPageChanged: onPageChanged,
+      // ),
     );
   }
 
@@ -69,6 +65,7 @@ class SettingsPage extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Card(
+      color: AppColors.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

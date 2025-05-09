@@ -30,21 +30,56 @@ class PreferenceListPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Icon(Icons.error_outline, color: AppColors.error, size: 64),
+                  const SizedBox(height: 16),
                   Text(
-                    state.error!,
+                    'Bir hata oluştu',
                     style: AppTextStyles.bodyLarge.copyWith(
                       color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    state.error!,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       context.read<PreferenceListCubit>().loadPreferences();
                     },
-                    child: const Text(
-                      'Tekrar Dene',
-                      style: AppTextStyles.button,
+                    child: const Text('Tekrar Dene'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (state.preferences.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.list_alt, color: AppColors.primaryDark, size: 64),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Henüz hiç tercih eklemediniz',
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tercih eklemek için simülasyon sayfasını kullanabilirsiniz.',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
@@ -63,6 +98,9 @@ class PreferenceListPage extends StatelessWidget {
                   preferences: state.preferences,
                   onPreferenceTap: (preference) {
                     // TODO: Navigate to preference details
+                  },
+                  onResetFilters: () {
+                    context.read<PreferenceListCubit>().updateFilterParams({});
                   },
                 ),
               ),

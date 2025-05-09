@@ -5,49 +5,39 @@ import 'package:tus/config/theme/app_text_styles.dart';
 
 class ErrorPage extends StatelessWidget {
   final String message;
-  final VoidCallback? onRetry;
 
   const ErrorPage({
     super.key,
     required this.message,
-    this.onRetry,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: const Text('Hata'),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              message,
-              style: AppTextStyles.bodyLarge.copyWith(
-                color: AppColors.textPrimary,
-              ),
-              textAlign: TextAlign.center,
+            const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 64,
             ),
             const SizedBox(height: 16),
-            if (onRetry != null)
-              ElevatedButton(
-                onPressed: onRetry,
-                child: const Text(
-                  'Tekrar Dene',
-                  style: AppTextStyles.button,
-                ),
-              ),
-            const SizedBox(height: 8),
-            TextButton(
+            Text(
+              message,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, AppRoutes.home);
+                Navigator.of(context).pop();
               },
-              child: Text(
-                'Ana Sayfaya Dön',
-                style: AppTextStyles.button.copyWith(
-                  color: AppColors.primary,
-                ),
-              ),
+              child: const Text('Geri Dön'),
             ),
           ],
         ),

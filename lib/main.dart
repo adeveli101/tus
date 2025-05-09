@@ -16,14 +16,17 @@ import 'package:tus/features/splash/presentation/pages/splash_page.dart';
 import 'package:tus/features/home/presentation/pages/home_page.dart';
 import 'package:tus/features/tus_scores/presentation/pages/tus_scores_page.dart';
 import 'package:tus/features/preferences/presentation/pages/preference_list_page.dart';
+import 'package:tus/features/preferences/presentation/pages/preference_simulation_page.dart';
 import 'package:tus/features/settings/presentation/pages/settings_page.dart';
 import 'package:tus/features/tus_scores/domain/entities/department.dart';
 import 'package:tus/features/tus_scores/presentation/pages/department_details_page.dart';
 import 'package:tus/core/presentation/widgets/app_bottom_nav.dart';
+import 'package:tus/core/presentation/pages/error_page.dart';
+import 'package:tus/features/preferences/cubit/preference_list_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'config/theme/app_colors.dart';
 import 'config/theme/app_text_styles.dart';
-import 'core/presentation/pages/error_page.dart';
 
 // Özel sayfa geçiş animasyonları
 class SlidePageRoute<T> extends MaterialPageRoute<T> {
@@ -121,14 +124,8 @@ class _MainPageState extends State<MainPage> {
               color: AppColors.textPrimary,
             ),
           ),
-          actions: [
-            if (_currentIndex == 0)
-              IconButton(
-                icon: const Icon(Icons.settings, color: AppColors.textPrimary),
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.settings);
-                },
-              ),
+          actions: const [
+            // Settings icon removed for Home tab
           ],
         ),
         body: AnimatedSwitcher(
@@ -151,7 +148,10 @@ class _MainPageState extends State<MainPage> {
     final List<Widget> pages = [
       HomePage(onPageChanged: _onPageChanged),
       TusScoresPage(onPageChanged: _onPageChanged),
-      PreferenceListPage(onPageChanged: _onPageChanged),
+      BlocProvider(
+        create: (_) => PreferenceListCubit()..loadPreferences(),
+        child: PreferenceListPage(onPageChanged: _onPageChanged),
+      ),
       SettingsPage(onPageChanged: _onPageChanged),
     ];
 
@@ -256,24 +256,52 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TUS Hazırlık Asistanı',
+      title: 'TUS',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.splash,
       routes: {
-        AppRoutes.home: (context) => const SplashPage(),
+        AppRoutes.splash: (context) => const SplashPage(),
+        AppRoutes.home: (context) => HomePage(onPageChanged: (index) {
+          Navigator.pushReplacementNamed(context, AppRoutes.main);
+        }),
         AppRoutes.main: (context) => const MainPage(),
-        AppRoutes.settings: (context) => SettingsPage(onPageChanged: (index) {}),
+        AppRoutes.settings: (context) => const MainPage(),
+        AppRoutes.preferenceSimulation: (context) => const PreferenceSimulationPage(),
+        AppRoutes.error: (context) => const ErrorPage(message: 'Sayfa bulunamadı'),
       },
       onGenerateRoute: (settings) {
         if (settings.name?.startsWith('/department/') ?? false) {
-          final department = settings.arguments as Department;
-          return ScalePageRoute(
-            builder: (context) => DepartmentDetailsPage(department: department),
+          final departmentId = settings.name!.split('/').last;
+          return MaterialPageRoute(
+            builder: (context) => DepartmentDetailsPage(
+              department: Department(
+                id: departmentId,
+                institution: 'Örnek Kurum',
+                department: 'Örnek Bölüm',
+                type: 'Genel',
+                year: '2024',
+                quota: '5',
+                score: 85.5,
+                ranking: 1000,
+                name: 'Örnek Bölüm',
+                university: 'Örnek Üniversite',
+                faculty: 'Tıp Fakültesi',
+                city: 'İstanbul',
+                minScore: 80.0,
+                maxScore: 90.0,
+                examPeriod: '2024-1',
+              ),
+            ),
           );
         }
         return null;
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => const ErrorPage(message: 'Bilinmeyen sayfa'),
+        );
       },
     );
   }

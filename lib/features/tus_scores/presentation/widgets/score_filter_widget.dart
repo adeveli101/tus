@@ -158,10 +158,23 @@ class _ScoreFilterWidgetState extends State<ScoreFilterWidget> {
         DropdownButtonFormField<String>(
           value: selectedYear,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: AppColors.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.border),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.border),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.primary),
             ),
           ),
+          dropdownColor: AppColors.surface,
+          style: const TextStyle(color: AppColors.textPrimary),
           items: const [
             DropdownMenuItem(value: '2024/2', child: Text('2024/2')),
             DropdownMenuItem(value: '2024/1', child: Text('2024/1')),

@@ -3,6 +3,9 @@
 /// Bu sınıf, uygulama içindeki tüm sayfa geçişlerini merkezi olarak yönetir.
 /// Route'ları string yerine sabit değerler olarak tanımlar ve tip güvenliği sağlar.
 class AppRoutes {
+  /// Splash sayfası route'u
+  static const String splash = '/splash';
+  
   /// Ana sayfa route'u
   static const String home = '/';
   
@@ -14,6 +17,9 @@ class AppRoutes {
   
   /// Tercih simülasyonu sayfası route'u
   static const String preferenceSimulation = '/preference-simulation';
+  
+  /// Tercih simülasyonu sonuçları sayfası route'u
+  static const String preferenceSimulationResults = '/preference-simulation-results';
   
   /// Bölüm detay sayfası route'u
   /// 
