@@ -1,0 +1,214 @@
+{
+  "uzmanlik_dallari": [
+    {
+      "brans_adi": "Acil Tıp",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Aile Hekimliği",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Çocuk Sağlığı ve Hastalıkları",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Deri ve Zührevi Hastalıkları",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Enfeksiyon Hastalıkları ve Klinik Mikrobiyoloji",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Fiziksel Tıp ve Rehabilitasyon",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Göğüs Hastalıkları",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Halk Sağlığı",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "İç Hastalıkları",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Kardiyoloji",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Nöroloji",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Nükleer Tıp",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Radyasyon Onkolojisi",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Radyoloji",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Ruh Sağlığı ve Hastalıkları",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Spor Hekimliği",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Tıbbi Farmakoloji",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Tıbbi Genetik",
+      "kategori": "Dahili Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Anesteziyoloji ve Reanimasyon",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Beyin ve Sinir Cerrahisi",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Çocuk Cerrahisi",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Genel Cerrahi",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Göğüs Cerrahisi",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Göz Hastalıkları",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Kadın Hastalıkları ve Doğum",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Kalp ve Damar Cerrahisi",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Kulak Burun Boğaz Hastalıkları",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Ortopedi ve Travmatoloji",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Plastik, Rekonstrüktif ve Estetik Cerrahi",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Üroloji",
+      "kategori": "Cerrahi Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Adli Tıp",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Anatomi",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Fizyoloji",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Histoloji ve Embriyoloji",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Tıbbi Biyokimya",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Tıbbi Mikrobiyoloji",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Tıbbi Patoloji",
+      "kategori": "Temel Tıp Bilimleri",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Askeri Sağlık Hizmetleri",
+      "kategori": "Diğer Özel Alanlar",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Hava ve Uzay Hekimliği",
+      "kategori": "Diğer Özel Alanlar",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Sualtı Hekimliği ve Hiperbarik Tıp",
+      "kategori": "Diğer Özel Alanlar",
+      "tip": "Ana Dal"
+    },
+    {
+      "brans_adi": "Tıbbi Ekoloji ve Hidroklimatoloji",
+      "kategori": "Diğer Özel Alanlar",
+      "tip": "Ana Dal"
+    }
+  ]
+} 

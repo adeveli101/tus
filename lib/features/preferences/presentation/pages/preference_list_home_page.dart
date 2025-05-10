@@ -48,23 +48,52 @@ class _PreferenceListHomePageState extends State<PreferenceListHomePage> {
     }
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: const Text('Tercih Listelerim', style: TextStyle(color: AppColors.textPrimary)),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-      ),
+      
       body: savedLists.isEmpty
-          ? Center(
-              child: ElevatedButton(
-                onPressed: _goToCreateList,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.textOnPrimary,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                  textStyle: const TextStyle(fontSize: 20),
+          ? Stack(
+              children: [
+                Align(
+                  alignment: const Alignment(0, -0.3),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.list_alt, size: 64, color: AppColors.primary.withOpacity(0.7)),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Tercih listeniz boş',
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: const Text('Liste Oluştur'),
-              ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom:60),
+                    child: ElevatedButton.icon(
+                      onPressed: _goToCreateList,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.textOnPrimary,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 4,
+                        shadowColor: AppColors.primary.withOpacity(0.9),
+                        side: const BorderSide(color: AppColors.border, width: 3),
+                      ),
+                      icon: const Icon(Icons.add, size: 24),
+                      label: const Text('Liste Oluştur'),
+                    ),
+                  ),
+                ),
+              ],
             )
           : Container(
               color: Colors.transparent,
@@ -76,13 +105,18 @@ class _PreferenceListHomePageState extends State<PreferenceListHomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Kayıtlı Tercih Listeleri', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.textPrimary)),
-                        ElevatedButton(
+                        ElevatedButton.icon(
                           onPressed: _goToCreateList,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: AppColors.textOnPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,
                           ),
-                          child: const Text('Yeni Liste Oluştur'),
+                          icon: const Icon(Icons.add),
+                          label: const Text('Yeni Liste'),
                         ),
                       ],
                     ),
@@ -96,8 +130,11 @@ class _PreferenceListHomePageState extends State<PreferenceListHomePage> {
                           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           color: Colors.transparent,
                           elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           child: ListTile(
-                            title: Text(list['title'] ?? 'Tercih Listesi', style: const TextStyle(color: AppColors.textPrimary)),
+                            title: Text(list['title'] ?? 'Tercih Listesi', style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
                             subtitle: Text(list['date'] ?? '', style: const TextStyle(color: AppColors.textSecondary)),
                             onTap: () {
                               // Detay sayfasına git veya düzenle

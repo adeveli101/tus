@@ -433,18 +433,6 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.surface,
-          elevation: 0,
-          leading: null,
-          title: Row(
-            children: [
-              const Icon(Icons.list_alt, color: AppColors.primary, size: 32),
-              const SizedBox(width: 8),
-              Text('Tercih Listem', style: AppTextStyles.titleLarge.copyWith(color: AppColors.textOnPrimary, fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ),
         drawer: null,
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
