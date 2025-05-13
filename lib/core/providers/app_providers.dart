@@ -11,7 +11,6 @@ import 'package:tus/core/firebase/firebase_service.dart';
 import 'package:tus/core/network/dio_client.dart';
 import 'package:tus/core/firebase/firebase_auth_service.dart';
 import 'package:tus/core/storage/hive_service.dart';
-import 'package:tus/features/tus_scores/data/datasources/tus_scores_remote_data_source.dart';
 import 'package:tus/features/tus_scores/data/repositories/tus_scores_repository_impl.dart';
 import 'package:tus/features/tus_scores/data/services/placement_prediction_service_impl.dart';
 import 'package:tus/features/tus_scores/data/services/comparison_service_impl.dart';
@@ -24,6 +23,7 @@ import 'package:tus/features/tus_scores/domain/services/sync_service_impl.dart' 
 import 'package:tus/features/tus_scores/domain/services/department_service_impl.dart';
 import 'package:tus/features/tus_scores/presentation/cubit/tus_scores_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tus/features/tus_scores/data/datasources/tus_scores_supabase_data_source.dart';
 
 import '../../features/tus_scores/domain/usecases/add_department_score_usecase.dart';
 import '../../features/tus_scores/domain/usecases/add_department_usecase.dart';
@@ -68,21 +68,18 @@ class AppProviders extends StatelessWidget {
         Provider<FirebaseAuthService>(
           create: (_) => FirebaseAuthService(),
         ),
-        Provider<TusScoresRemoteDataSource>(
-          create: (context) => TusScoresRemoteDataSourceImpl(
-            firestore: context.read<FirebaseFirestore>(),
-          ),
-        ),
+
         Provider<PlacementPredictionService>(
           create: (_) => PlacementPredictionServiceImpl(),
         ),
+        Provider<TusScoresSupabaseDataSource>(
+          create: (_) => TusScoresSupabaseDataSource(),
+        ),
         Provider<TusScoresRepository>(
           create: (context) => TusScoresRepositoryImpl(
-            remoteDataSource: context.read<TusScoresRemoteDataSource>(),
             predictionService: context.read<PlacementPredictionService>(),
             database: context.read<Database>(),
             connectivity: context.read<Connectivity>(),
-            firestore: context.read<FirebaseFirestore>(),
           ),
         ),
         Provider<SyncService>(
@@ -90,7 +87,6 @@ class AppProviders extends StatelessWidget {
             repository: context.read<TusScoresRepository>(),
             database: context.read<Database>(),
             connectivity: context.read<Connectivity>(),
-            firestore: context.read<FirebaseFirestore>(),
           ),
         ),
         Provider<DepartmentService>(

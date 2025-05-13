@@ -18,8 +18,9 @@ class DepartmentServiceImpl implements DepartmentService {
   Future<List<DepartmentCategory>> loadDepartments() async {
     try {
       final tusData = await TusDataLoader.loadTusData();
-      // Örnek: Sadece aktif uzmanlık dallarını kategorilere ayırarak dön
-      final Map<String, List<String>> categories = Map<String, List<String>>.from(tusData["aktifTusUzmanlikDallariListesi"]);
+      final data = tusData.isNotEmpty ? tusData[0] : {};
+      final Map<String, dynamic> categoriesRaw = Map<String, dynamic>.from(data["aktifTusUzmanlikDallariListesi"]);
+      final Map<String, List<String>> categories = categoriesRaw.map((k, v) => MapEntry(k, List<String>.from(v)));
       return categories.entries.map((entry) {
         final departments = entry.value.map((name) => Department(
           id: name,
@@ -53,10 +54,11 @@ class DepartmentServiceImpl implements DepartmentService {
   @override
   Future<List<Department>> getDepartments() async {
     final tusData = await TusDataLoader.loadTusData();
+    final data = tusData.isNotEmpty ? tusData[0] : {};
     final List<String> allDepartments = [
-      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
-      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
-      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+      ...List<String>.from(data["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+      ...List<String>.from(data["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+      ...List<String>.from(data["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
     ];
     return allDepartments.map((name) => Department(
       id: name,
@@ -87,7 +89,8 @@ class DepartmentServiceImpl implements DepartmentService {
   @override
   Future<List<Department>> getDepartmentsByCategory(String categoryId) async {
     final tusData = await TusDataLoader.loadTusData();
-    final List<String> departments = List<String>.from(tusData["aktifTusUzmanlikDallariListesi"][categoryId] ?? []);
+    final data = tusData.isNotEmpty ? tusData[0] : {};
+    final List<String> departments = List<String>.from(data["aktifTusUzmanlikDallariListesi"][categoryId] ?? []);
     return departments.map((name) => Department(
       id: name,
       institution: '',

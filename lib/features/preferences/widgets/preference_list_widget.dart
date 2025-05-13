@@ -43,7 +43,7 @@ class PreferenceListPage extends StatefulWidget {
 
 class _PreferenceListPageState extends State<PreferenceListPage> {
   final List<PreferenceItem> _preferences = [];
-  Map<String, dynamic>? _tusData;
+  List<Map<String, dynamic>>? _tusData;
   bool _isLoading = true;
   String? _loadError;
 
@@ -69,10 +69,10 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
       _loadError = null;
     });
     try {
-      final data = await TusDataLoader.loadTusData();
+      final data = _tusData?.isNotEmpty == true ? _tusData!.first : null;
       if (mounted) {
         setState(() {
-          _tusData = data;
+          _tusData = data == null ? null : [data];
           _isLoading = false;
           _prepareInitialFilterData();
         });
@@ -92,9 +92,9 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
     // Tüm branşları hazırla
     try {
       _allBranches = [
-        ...List<String>.from(_tusData!["metaVeriler"]["uzmanlikDallariListesi"]["dahiliTipBilimleri"] ?? []),
-        ...List<String>.from(_tusData!["metaVeriler"]["uzmanlikDallariListesi"]["cerrahiTipBilimleri"] ?? []),
-        ...List<String>.from(_tusData!["metaVeriler"]["uzmanlikDallariListesi"]["temelTipBilimleri"] ?? []),
+        ...List<String>.from(_tusData!.first["metaVeriler"]["uzmanlikDallariListesi"]["dahiliTipBilimleri"] ?? []),
+        ...List<String>.from(_tusData!.first["metaVeriler"]["uzmanlikDallariListesi"]["cerrahiTipBilimleri"] ?? []),
+        ...List<String>.from(_tusData!.first["metaVeriler"]["uzmanlikDallariListesi"]["temelTipBilimleri"] ?? []),
       ];
       _allBranches.sort();
     } catch (e) {
@@ -158,12 +158,12 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
       return;
     }
     if (_selectedInstitutionType == 'universite') {
-      _filteredCities = (_tusData!["kurumVerileri"]["universiteTipFakulteleri"] as List)
+      _filteredCities = (_tusData!.first["kurumVerileri"]["universiteTipFakulteleri"] as List)
           .map<String>((u) => u["sehir"] as String)
           .toSet()
           .toList();
     } else if (_selectedInstitutionType == 'eah') {
-      _filteredCities = (_tusData!["kurumVerileri"]["eahVeSehirHastaneleri"] as List)
+      _filteredCities = (_tusData!.first["kurumVerileri"]["eahVeSehirHastaneleri"] as List)
           .map<String>((h) => h["il"] as String)
           .toSet()
           .toList();
@@ -181,12 +181,12 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
 
     List<Map<String, dynamic>> institutions = [];
     if (_selectedInstitutionType == 'universite') {
-      institutions = List<Map<String, dynamic>>.from(_tusData!["kurumVerileri"]["universiteTipFakulteleri"]);
+      institutions = List<Map<String, dynamic>>.from(_tusData!.first["kurumVerileri"]["universiteTipFakulteleri"]);
       if (_selectedCity != null) {
-        institutions = institutions.where((u) => u["sehir"] == _selectedCity).toList();
+        institutions = institutions.where((u) => u["sehir"].toString() == _selectedCity).toList();
       }
     } else if (_selectedInstitutionType == 'eah') {
-      institutions = List<Map<String, dynamic>>.from(_tusData!["kurumVerileri"]["eahVeSehirHastaneleri"]);
+      institutions = List<Map<String, dynamic>>.from(_tusData!.first["kurumVerileri"]["eahVeSehirHastaneleri"]);
       if (_selectedCity != null) {
         institutions = institutions.where((h) => h["il"] == _selectedCity).toList();
       }

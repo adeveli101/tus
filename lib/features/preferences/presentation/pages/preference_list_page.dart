@@ -13,7 +13,7 @@ class PreferenceListPage extends StatefulWidget {
 }
 
 class _PreferenceListPageState extends State<PreferenceListPage> {
-  Map<String, dynamic>? tusData;
+  List<Map<String, dynamic>>? tusData;
   bool isLoading = true;
 
   // Filtreler
@@ -71,14 +71,14 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
   List<Map<String, dynamic>> getFilteredUniversityBranches() {
     if (tusData == null) return [];
     List<Map<String, dynamic>> allItems = [];
-    for (var u in tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]) {
+    for (var u in tusData!) {
       final String university = u['universiteAdi'];
-      final String city = u['sehir'];
+      final String city = u['sehir'].toString();
       final String faculty = u['tipFakultesiAdi'] ?? '';
       for (final branch in [
-        ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
-        ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
-        ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+        ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+        ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+        ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
       ]) {
         allItems.add({
           'university': university,
@@ -109,8 +109,8 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
       filtered.sort((a, b) => (a['branch'] as String).compareTo(b['branch'] as String));
     } else if (_sortType == 'lowScore' || _sortType == 'highScore') {
       Map<String, num> branchMinScore = {};
-      if (tusData != null && tusData!.containsKey('uzmanlikDallariVeEgitimSureleri')) {
-        for (var e in tusData!['uzmanlikDallariVeEgitimSureleri']) {
+      if (tusData != null && tusData!.isNotEmpty && tusData![0].containsKey('uzmanlikDallariVeEgitimSureleri')) {
+        for (var e in tusData![0]['uzmanlikDallariVeEgitimSureleri']) {
           if (e['uzmanlikDali'] != null && e['enDusukPuan'] != null) {
             branchMinScore[e['uzmanlikDali']] = num.tryParse(e['enDusukPuan'].toString()) ?? 0;
           }
@@ -128,16 +128,16 @@ class _PreferenceListPageState extends State<PreferenceListPage> {
   List<String> getAllBranches() {
     if (tusData == null) return [];
     return [
-      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
-      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
-      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+      ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+      ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+      ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
     ];
   }
 
   List<String> getAllCities() {
     if (tusData == null) return [];
     final Set<String> allCities = {
-      ...tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"].map<String>((u) => u["sehir"] as String),
+      ...tusData!.map((u) => u["sehir"].toString()),
     };
     return allCities.toList();
   }

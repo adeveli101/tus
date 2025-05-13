@@ -1,11 +1,14 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unnecessary_type_check
 
 import 'package:flutter/material.dart';
-import 'package:tus/core/data/tus_data_loader.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_text_styles.dart';
+import '../../data/datasources/tus_scores_supabase_data_source.dart';
+import '../../domain/entities/brans.dart';
+import '../../domain/entities/donem.dart';
+import '../../domain/entities/tus_veri_ana.dart';
 
 class TusScoresPage extends StatefulWidget {
   final Function(int) onPageChanged;
@@ -20,392 +23,221 @@ class TusScoresPage extends StatefulWidget {
 }
 
 class _TusScoresPageState extends State<TusScoresPage> {
-  Map<String, dynamic>? tusData;
+  final TusScoresSupabaseDataSource supabaseDataSource = TusScoresSupabaseDataSource();
+
+  List<Donem> donemler = [];
+  List<Brans> branslar = [];
+  List<Map<String, dynamic>> kurumlar = [];
+  List<TusVeriAna> tusVerileri = [];
+
+  Donem? selectedDonem;
+  Brans? selectedBrans;
+  Map<String, dynamic>? selectedKurum;
+
+  String? error;
+  bool kurumlarLoading = false;
+  // ignore: prefer_final_fields
+  bool _summaryExpanded = true;
+
+  late Future<void> _initFuture;
 
   @override
   void initState() {
     super.initState();
-    TusDataLoader.loadTusData().then((data) {
+    _initFuture = _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    try {
+      final donemlerResponse = await supabaseDataSource.getDonemler();
+      final branslarResponse = await supabaseDataSource.getBranslar();
+      Donem? latestDonem;
+      if (donemlerResponse.isNotEmpty) {
+        latestDonem = donemlerResponse.reduce((a, b) {
+          if (a.sinavyili > b.sinavyili) return a;
+          if (a.sinavyili < b.sinavyili) return b;
+          return a.sinavdonemiadi.compareTo(b.sinavdonemiadi) > 0 ? a : b;
+        });
+      }
       setState(() {
-        tusData = data;
+        donemler = donemlerResponse;
+        branslar = branslarResponse;
+        selectedDonem = latestDonem;
+        selectedBrans = null;
+        selectedKurum = null;
+        kurumlar = [];
+        tusVerileri = [];
       });
+      if (latestDonem != null) {
+        await _loadKurumlar(latestDonem);
+        await _loadTusVerileri();
+      }
+    } catch (e) {
+      setState(() {
+        error = e.toString();
+      });
+    }
+  }
+
+  Future<void> _loadKurumlar(Donem donem) async {
+    setState(() {
+      kurumlarLoading = true;
     });
+    try {
+      final kurumlarResponse = await supabaseDataSource.getKurumlarByDonem(donem);
+      setState(() {
+        kurumlar = kurumlarResponse;
+        selectedKurum = null;
+        kurumlarLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        kurumlar = [];
+        selectedKurum = null;
+        kurumlarLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadTusVerileri() async {
+    if (selectedDonem == null) {
+      setState(() {
+        tusVerileri = [];
+      });
+      return;
+    }
+    setState(() {
+      error = null;
+    });
+    try {
+      final tusVeriResponse = await supabaseDataSource.getTusVerileriAnaFiltered(
+        donemId: selectedDonem?.donemid,
+        bransId: selectedBrans?.bransid,
+        kurumId: selectedKurum != null ? selectedKurum!["id"] as int : null,
+      );
+      setState(() {
+        tusVerileri = tusVeriResponse;
+      });
+    } catch (e) {
+      setState(() {
+        error = e.toString();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (tusData == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final List<dynamic> kontenjanlar = tusData!["sonTusToplamKontenjanlar"];
-    final List<dynamic> bransKontenjanDegisimleri = tusData!["secilmisUzmanlikDallariKontenjanDegisimleri"];
-    final List<String> branslar = bransKontenjanDegisimleri.map<String>((e) => e["brans"] as String).toList();
-
-    // Dönemleri çıkar (ör: 2025 Mart, 2024 Ağustos ...)
-    final List<String> donemler = kontenjanlar.map<String>((e) => e["tusDonemi"] as String).toList();
-    String selectedDonem = donemler.isNotEmpty ? donemler.first : "";
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: StatefulBuilder(
-        builder: (context, setStateSB) {
-          return Column(
-            children: [
-              // Dönem kartları (tıklanabilir)
-              SizedBox(
-                height: 70,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  itemCount: kontenjanlar.length,
-                  itemBuilder: (context, index) {
-                    final item = kontenjanlar[index];
-                    final isSelected = item["tusDonemi"] == selectedDonem;
-                    return GestureDetector(
-                      onTap: () {
-                        setStateSB(() {
-                          selectedDonem = item["tusDonemi"];
-                        });
-                      },
-                      child: Card(
-                        color: isSelected ? AppColors.primary : AppColors.surface,
-                        elevation: isSelected ? 3 : 1,
-                        margin: const EdgeInsets.only(right: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: isSelected ? AppColors.primaryDark : AppColors.border, width: isSelected ? 2 : 1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item["tusDonemi"] ?? "-",
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: isSelected ? AppColors.textOnPrimary : AppColors.textPrimary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              // Seçili döneme ait branş/kontenjan tablosu
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: _buildDonemBransTablo(bransKontenjanDegisimleri, selectedDonem),
-                ),
-              ),
-            ],
+    return FutureBuilder<void>(
+      future: _initFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+            backgroundColor: Colors.transparent,
           );
-        },
-      ),
-    );
-  }
-
-  Widget _buildDonemBransTablo(List<dynamic> bransKontenjanDegisimleri, String selectedDonem) {
-    // Dönem stringini kontenjan anahtarına çevir (ör: 2025 Mart -> kontenjan2025Mart)
-    String donemKey = selectedDonem
-        .replaceAll(" ", "")
-        .replaceAll("ı", "i")
-        .replaceAll("ğ", "g")
-        .replaceAll("ü", "u")
-        .replaceAll("ş", "s")
-        .replaceAll("ö", "o")
-        .replaceAll("ç", "c")
-        .replaceAll("İ", "I")
-        .replaceAll("Ğ", "G")
-        .replaceAll("Ü", "U")
-        .replaceAll("Ş", "S")
-        .replaceAll("Ö", "O")
-        .replaceAll("Ç", "C");
-    donemKey = "kontenjan$donemKey";
-
-    // Tüm branşları aktifTusUzmanlikDallariListesi'nden çek
-    final tusData = this.tusData;
-    final Map<String, dynamic> aktifBranslar = tusData?["aktifTusUzmanlikDallariListesi"] ?? {};
-    final List<String> allBranslar = [
-      ...((aktifBranslar["dahiliTipBilimleri"] ?? []) as List),
-      ...((aktifBranslar["cerrahiTipBilimleri"] ?? []) as List),
-    ];
-
-    // Her branş için o dönemin kontenjanını bul (veya -)
-    final List<Map<String, dynamic>> rows = allBranslar.map<Map<String, dynamic>>((brans) {
-      final found = bransKontenjanDegisimleri.firstWhere(
-        (e) => (e["brans"] ?? "").toString().toLowerCase() == brans.toString().toLowerCase(),
-        orElse: () => null,
-      );
-      return {
-        "brans": brans,
-        "kontenjan": found != null ? found[donemKey] : '-',
-      };
-    }).toList();
-
-    // Toplam kontenjanı bul
-    int toplamKontenjan = 0;
-    for (final row in rows) {
-      final val = int.tryParse(row["kontenjan"].toString());
-      if (val != null) toplamKontenjan += val;
-    }
-
-    // Puan verilerini hazırla (taban/tavan)
-    final puanAnalizi = tusData?["gecmisTusPuanAnalizi"];
-    Map<String, Map<String, dynamic>> bransPuanMap = {};
-    if (puanAnalizi != null) {
-      if (puanAnalizi["yokKontenjanPuanAraliklari2022BirinciDonem"] != null) {
-        for (final p in List<Map<String, dynamic>>.from(puanAnalizi["yokKontenjanPuanAraliklari2022BirinciDonem"])) {
-          bransPuanMap[p["brans"]?.toString().toLowerCase() ?? ""] = {
-            "taban": p["tabanPuan"],
-            "tavan": p["tavanPuan"],
-          };
         }
-      }
-      if (puanAnalizi["tahminiPuanAraliklari2024Eylul"] != null) {
-        for (final p in List<Map<String, dynamic>>.from(puanAnalizi["tahminiPuanAraliklari2024Eylul"])) {
-          bransPuanMap[p["brans"]?.toString().toLowerCase() ?? ""] = {
-            "taban": p["tahminiTabanPuan"],
-            "tavan": p["tahminiTavanPuan"],
-          };
+        if (error != null) {
+          return const Scaffold(
+            body: Center(child: Text('Hata oluştu')),
+            backgroundColor: Colors.transparent,
+          );
         }
-      }
-    }
-
-    if (rows.isEmpty) {
-      return Center(
-        child: Text('Bu döneme ait branş kontenjanı verisi yok.', style: AppTextStyles.bodyLarge.copyWith(color: AppColors.error)),
-      );
-    }
-
-    return Card(
-      color: AppColors.primaryLight,
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: AppColors.primary, width: 1),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    '$selectedDonem\nUzmanlık Kontenjanları',
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.primaryDark,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'Toplam: $toplamKontenjan',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.primaryDark,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView(
-                children: [
-                  Table(
-                    columnWidths: const {
-                      0: FlexColumnWidth(3),
-                      1: FlexColumnWidth(2),
-                      2: FlexColumnWidth(1),
-                      3: FlexColumnWidth(1),
-                      4: FlexColumnWidth(1),
-                    },
-                    border: TableBorder.symmetric(inside: BorderSide(color: AppColors.border.withOpacity(0.3))),
-                    children: [
-                      TableRow(
-                        decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.15)),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text('Branş', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text('Kontenjan', textAlign: TextAlign.center, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text('Min Puan', textAlign: TextAlign.center, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text('Max Puan', textAlign: TextAlign.center, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                          ),
-                          const SizedBox(),
-                        ],
-                      ),
-                      ...rows.map((row) {
-                        final puan = bransPuanMap[row["brans"]?.toString().toLowerCase() ?? ""];
-                        final kontenjan = row["kontenjan"] ?? '-';
-                        return TableRow(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: Text(row["brans"], style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: Text(kontenjan.toString(), textAlign: TextAlign.center, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: Text(puan != null ? (puan["taban"]?.toString() ?? '-') : '-', textAlign: TextAlign.center, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: Text(puan != null ? (puan["tavan"]?.toString() ?? '-') : '-', textAlign: TextAlign.center, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: IconButton(
-                                icon: const Icon(Icons.info_outline, color: AppColors.primaryDark, size: 20),
-                                tooltip: 'Hastanelere göre kontenjan',
-                                onPressed: () {
-                                  _showHospitalQuotaModal(row["brans"], selectedDonem);
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showHospitalQuotaModal(String brans, String donem) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      backgroundColor: AppColors.surface,
-      isScrollControlled: true,
-      builder: (context) {
-        final tusData = this.tusData;
-        final bransObj = tusData!["secilmisUzmanlikDallariKontenjanDegisimleri"]
-            .firstWhere((e) => e["brans"] == brans, orElse: () => null);
-        final puanAnalizi = tusData["gecmisTusPuanAnalizi"];
-        final egitimSuresiObj = tusData["uzmanlikDallariVeEgitimSureleri"]
-            .firstWhere((e) => e["uzmanlikDali"].toString().contains(brans), orElse: () => null);
-        final List<dynamic> allHospitalsRaw = tusData["eahVeSehirHastaneleriOrnekler"] ?? [];
-        final List<dynamic> allUniversitiesRaw = tusData["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"] ?? [];
-        // Hastaneler
-        final List<Map<String, String>> allHospitals = allHospitalsRaw.map<Map<String, String>>((h) => {
-          "kurum": h["hastaneAdi"] ?? h["il"] ?? "-",
-          "fakulte": h["afiliyeOlduguFakulte_SBU"] ?? "-",
-        }).toList();
-        // Üniversite/Fakülteler
-        final List<Map<String, String>> allUniversities = allUniversitiesRaw.map<Map<String, String>>((u) => {
-          "kurum": (u["universiteAdi"] != null && u["tipFakultesiAdi"] != null)
-              ? "${u["universiteAdi"]} - ${u["tipFakultesiAdi"]}"
-              : (u["universiteAdi"] ?? u["tipFakultesiAdi"] ?? u["sehir"] ?? "-"),
-          "kurulus": u["kurumTuru"] ?? u["kurulusTipi"] ?? "YÖK",
-        }).toList();
-        // Tek bir listeye birleştir, tekrarları önle
-        final Set<String> kurumSet = {};
-        final List<Map<String, String>> allKurumlar = [];
-        for (final h in [...allHospitals, ...allUniversities]) {
-          if (!kurumSet.contains(h["kurum"])) {
-            kurumSet.add(h["kurum"] ?? "");
-            allKurumlar.add(h);
-          }
+        if (donemler.isEmpty || branslar.isEmpty) {
+          return const Scaffold(
+            body: Center(child: Text('Veri yok.')),
+            backgroundColor: Colors.transparent,
+          );
         }
-        return DefaultTabController(
-          length: 2,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 20, right: 20, top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            ),
+
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.local_hospital, color: AppColors.primaryDark),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text('$brans - $donem', style: AppTextStyles.titleLarge.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
-                if (egitimSuresiObj != null) ...[
-                  const SizedBox(height: 6),
-                  Text('Kategori: ${egitimSuresiObj["kategori"]}', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textHint)),
-                  Text('Eğitim Süresi: ${egitimSuresiObj["egitimSuresiYil"]} yıl', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textHint)),
-                ],
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryLight.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: TabBar(
-                    labelColor: AppColors.primaryDark,
-                    unselectedLabelColor: AppColors.textSecondary,
-                    indicator: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    tabs: const [
-                      Tab(text: 'Kontenjan Değişimi'),
-                      Tab(text: 'Hastaneler'),
-                    ],
+                SizedBox(
+                  height: 44,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: donemler.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) {
+                      final donem = donemler[index];
+                      final isSelected = selectedDonem?.donemid == donem.donemid;
+                      return ChoiceChip(
+                        label: Text('${donem.sinavyili} - ${donem.sinavdonemiadi}',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        ),
+                        selected: isSelected,
+                        selectedColor: AppColors.primary,
+                        backgroundColor: AppColors.surface,
+                        onSelected: (selected) async {
+                          if (isSelected) {
+                            setState(() {
+                              selectedDonem = null;
+                              kurumlar = [];
+                              selectedKurum = null;
+                            });
+                            await _loadTusVerileri();
+                          } else {
+                            setState(() {
+                              selectedDonem = donem;
+                              kurumlar = [];
+                              selectedKurum = null;
+                            });
+                            await _loadKurumlar(donem);
+                            await _loadTusVerileri();
+                          }
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: isSelected ? 2 : 0,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
-                SizedBox(
-                  height: 320,
-                  child: TabBarView(
-                    children: [
-                      SingleChildScrollView(
-                        child: _buildBransKontenjanDegisimTablo(bransObj),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 3,
+                      child: _buildDropdown<Brans>(
+                        label: 'Branş',
+                        value: selectedBrans,
+                        items: <Brans?>[null, ...[...branslar]..sort((a, b) => a!.bransadi.compareTo(b!.bransadi))],
+                        getLabel: (b) => b == null ? 'Branş seçiniz' : b.bransadi,
+                        onChanged: (b) async {
+                          setState(() { selectedBrans = b; });
+                          await _loadTusVerileri();
+                        },
+                        isExpanded: true,
                       ),
-                      SingleChildScrollView(
-                        child: _buildHospitalTableWithPuan(allKurumlar, brans, puanAnalizi),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      flex: 4,
+                      child: kurumlarLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : _buildDropdown<Map<String, dynamic>>(
+                            label: 'Kurum',
+                            value: selectedKurum,
+                            items: <Map<String, dynamic>?>[null, ...kurumlar],
+                            getLabel: (k) => k == null ? 'Kurum seçiniz' : (k["kurum_adi"] ?? '-'),
+                            onChanged: (k) async {
+                              setState(() { selectedKurum = k; });
+                              await _loadTusVerileri();
+                            },
+                            isExpanded: true,
+                          ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 16),
+                _buildSummary(),
+                const SizedBox(height: 16),
+                Expanded(child: _buildTable()),
               ],
             ),
           ),
@@ -414,136 +246,240 @@ class _TusScoresPageState extends State<TusScoresPage> {
     );
   }
 
-  Widget _buildBransKontenjanDegisimTablo(Map<String, dynamic>? bransObj) {
-    if (bransObj == null) {
-      return Text('Veri yok', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error));
+  Widget _buildDropdown<T>({
+    required String label,
+    required T? value,
+    required List<T?> items,
+    required String Function(T?) getLabel,
+    required ValueChanged<T?> onChanged,
+    bool isExpanded = false,
+  }) {
+    return DropdownButtonFormField<T>(
+      value: value,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: AppColors.surface,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: AppColors.primary.withOpacity(0.25), width: 1.2)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: AppColors.primary.withOpacity(0.25), width: 1.2)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      ),
+      hint: Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+      dropdownColor: AppColors.surface,
+      isExpanded: isExpanded,
+      items: items.map((item) => DropdownMenuItem<T>(
+        value: item,
+        child: Text(
+          getLabel(item),
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
+        ),
+      )).toList(),
+      onChanged: onChanged,
+      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
+      iconEnabledColor: AppColors.textPrimary,
+      selectedItemBuilder: (context) => items.map((item) {
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            getLabel(item),
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildSummary() {
+    if (tusVerileri.isEmpty) {
+      return const Text('Seçilen filtrelere ait veri bulunamadı.', style: TextStyle(color: Colors.redAccent));
     }
-    final yearEntries = bransObj.entries.where((e) => e.key.startsWith('kontenjan')).toList();
-    yearEntries.sort((a, b) => b.key.compareTo(a.key));
-    return Table(
-      columnWidths: const {0: FlexColumnWidth(2), 1: FlexColumnWidth(1)},
-      border: TableBorder.symmetric(inside: BorderSide(color: AppColors.border.withOpacity(0.3))),
-      children: [
-        TableRow(
-          decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.15)),
+    int toplamKontenjan = tusVerileri.fold(0, (sum, v) => sum + (v.kontenjanSayisi ?? 0));
+    int toplamYerlesen = tusVerileri.fold(0, (sum, v) => sum + (v.yerlesenSayisi ?? 0));
+    int toplamBos = tusVerileri.fold(0, (sum, v) => sum + (v.bosKalanSayisi ?? 0));
+    double? minTaban = tusVerileri.map((v) => v.tabanPuan).whereType<double>().fold<double?>(null, (min, p) => min == null ? p : (p < min ? p : min));
+    double? maxTavan = tusVerileri.map((v) => v.tavanPuan).whereType<double>().fold<double?>(null, (max, p) => max == null ? p : (p > max ? p : max));
+    return Card(
+      color: AppColors.surface,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: AppColors.primary.withOpacity(0.25), width: 1.2),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Dönem', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Kontenjan', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            ),
+            _buildSummaryItem('Kontenjan', toplamKontenjan.toString(), icon: Icons.people_alt_outlined),
+            _buildSummaryItem('Yerleşen', toplamYerlesen.toString(), icon: Icons.check_circle_outline),
+            _buildSummaryItem('Boş', toplamBos.toString(), icon: Icons.remove_circle_outline),
+            _buildSummaryItem('Min Taban', minTaban?.toStringAsFixed(2) ?? '-', icon: Icons.arrow_downward),
+            _buildSummaryItem('Max Tavan', maxTavan?.toStringAsFixed(2) ?? '-', icon: Icons.arrow_upward),
           ],
         ),
-        ...yearEntries.map((e) => TableRow(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text(e.key.replaceFirst('kontenjan', ''), style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text(e.value.toString(), style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-            ),
-          ],
-        )),
+      ),
+    );
+  }
+
+  Widget _buildSummaryItem(String label, String value, {IconData? icon}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (icon != null) Icon(icon, size: 16, color: AppColors.primary),
+        const SizedBox(height: 2),
+        Text(label, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary, fontSize: 11)),
+        const SizedBox(height: 2),
+        Text(value, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary, fontSize: 13)),
       ],
     );
   }
 
-  Widget _buildHospitalTableWithPuan(List<Map<String, String>> hospitals, String brans, Map<String, dynamic> puanAnalizi) {
-    // Hastane/branş bazlı puanları hazırla
-    final List<Map<String, dynamic>> hastanePuanlar = [];
-    puanAnalizi.forEach((key, value) {
-      if (value is Map && value.containsKey("tabanPuan") && value.containsKey("tavanPuan")) {
-        if (key.toLowerCase().contains(brans.toLowerCase().replaceAll(' ', ''))) {
-          hastanePuanlar.add({
-            "hastane": key,
-            "tabanPuan": value["tabanPuan"],
-            "tavanPuan": value["tavanPuan"],
-          });
+  Widget _buildTable() {
+    if (tusVerileri.isEmpty) {
+      return const Center(child: Text('Tablo verisi yok.', style: TextStyle(color: AppColors.textPrimary)));
+    }
+    final sortedTusVerileri = [...tusVerileri];
+    // ignore: unnecessary_null_comparison
+    final kurumlarForTable = kurumlar.where((k) => k != null).cast<Map<String, dynamic>>().toList();
+    final Map<int, String> kurumIdToAdi = {
+      for (var k in kurumlarForTable)
+        if (k['id'] is int && k['kurum_adi'] is String) k['id'] as int : k['kurum_adi'] as String
+    };
+    final Map<int, String> bransIdToAdi = {
+      for (var b in branslar)
+        if (b.bransadi is String) b.bransid : b.bransadi
+    };
+    sortedTusVerileri.sort((a, b) {
+      final kurumA = kurumIdToAdi[a.kurumId is int ? a.kurumId : int.tryParse(a.kurumId.toString())] ?? '';
+      final kurumB = kurumIdToAdi[b.kurumId is int ? b.kurumId : int.tryParse(b.kurumId.toString())] ?? '';
+      return kurumA.compareTo(kurumB);
+    });
+
+    const double kurumWidth = 110;
+    const double bransWidth = 110;
+    const double smallWidth = 70;
+    const double ozelWidth = 130;
+    const double cellHeight = 38;
+    const headerStyle = TextStyle(color: AppColors.textPrimary, fontSize: 11, fontWeight: FontWeight.bold);
+    const cellStyle = TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.2);
+    const cellPadding = EdgeInsets.symmetric(horizontal: 6, vertical: 4);
+    const borderColor = AppColors.primaryLight;
+
+    Widget buildCell(String text, double width, {int? maxLines, bool bold = false, bool center = false, bool isHeader = false, bool isOzel = false}) {
+      return Container(
+        width: width,
+        height: null,
+        alignment: center ? Alignment.center : Alignment.centerLeft,
+        padding: isHeader
+            ? cellPadding
+            : const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+        color: isHeader ? AppColors.primaryLight.withOpacity(0.7) : null,
+        child: Text(
+          text,
+          maxLines: isOzel ? 2 : 1,
+          overflow: isOzel ? TextOverflow.ellipsis : TextOverflow.ellipsis,
+          softWrap: isOzel,
+          style: (isHeader ? headerStyle : cellStyle).copyWith(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
+        ),
+      );
+    }
+
+    Widget buildRow(List<Widget> cells, {bool isHeader = false}) {
+      final List<Widget> rowChildren = [];
+      for (int i = 0; i < cells.length; i++) {
+        rowChildren.add(cells[i]);
+        if (i != cells.length - 1) {
+          rowChildren.add(Container(
+            width: isHeader ? 8.0 : 1.0,
+            height: null,
+            color: borderColor.withOpacity(isHeader ? 0.7 : 0.4),
+          ));
         }
       }
-    });
-    // Tüm kuruluşları tusData'dan çek (hastane, üniversite, fakülte)
-    final tusData = this.tusData;
-    final List<dynamic> allHospitalsRaw = tusData?["eahVeSehirHastaneleriOrnekler"] ?? [];
-    final List<dynamic> allUniversitiesRaw = tusData?["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"] ?? [];
-    // Hastaneler
-    final List<Map<String, String>> allHospitals = allHospitalsRaw.map<Map<String, String>>((h) => {
-      "kurum": h["hastaneAdi"] ?? h["il"] ?? "-",
-      "fakulte": h["afiliyeOlduguFakulte_SBU"] ?? "-",
-    }).toList();
-    // Üniversite/Fakülteler
-    final List<Map<String, String>> allUniversities = allUniversitiesRaw.map<Map<String, String>>((u) => {
-      "kurum": (u["universiteAdi"] != null && u["tipFakultesiAdi"] != null)
-          ? "${u["universiteAdi"]} - ${u["tipFakultesiAdi"]}"
-          : (u["universiteAdi"] ?? u["tipFakultesiAdi"] ?? u["sehir"] ?? "-"),
-      "kurulus": u["universiteAdi"] ?? u["kurulusTipi"] ?? "YÖK",
-    }).toList();
-    // Tek bir listeye birleştir, tekrarları önle
-    final Set<String> kurumSet = {};
-    final List<Map<String, String>> allKurumlar = [];
-    for (final h in [...allHospitals, ...allUniversities]) {
-      if (!kurumSet.contains(h["kurum"])) {
-        kurumSet.add(h["kurum"] ?? "");
-        allKurumlar.add(h);
-      }
+      return IntrinsicHeight(child: Row(children: rowChildren));
     }
-    return Table(
-      columnWidths: const {0: FlexColumnWidth(3), 1: FlexColumnWidth(2), 2: FlexColumnWidth(1), 3: FlexColumnWidth(1)},
-      border: TableBorder.symmetric(inside: BorderSide(color: AppColors.border.withOpacity(0.3))),
-      children: [
-        TableRow(
-          decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.15)),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Kurum', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+
+    const int minRows = 3;
+    final int rowCount = sortedTusVerileri.length < minRows ? minRows : sortedTusVerileri.length;
+    final double tableHeight = cellHeight * (rowCount + 1) + 2;
+
+    return Card(
+      color: AppColors.surface,
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: AppColors.primary.withOpacity(0.18), width: 1),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Scrollbar(
+          thumbVisibility: true,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: kurumWidth + bransWidth + smallWidth * 7 + ozelWidth + 16 + 56,
+              height: tableHeight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildRow([
+                    buildCell('Kurum', kurumWidth, bold: true, isHeader: true),
+                    buildCell('Branş', bransWidth, bold: true, isHeader: true),
+                    buildCell('Kont.', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Kont. Türü', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Puan Türü', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Taban', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Yerleşen', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Boş', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Tavan', smallWidth, bold: true, center: true, isHeader: true),
+                    buildCell('Özel', ozelWidth, bold: true, isHeader: true),
+                  ], isHeader: true),
+                  const Divider(height: 1, thickness: 1.2, color: borderColor),
+                  Flexible(
+                    child: ListView.builder(
+                      itemCount: rowCount,
+                      itemBuilder: (context, index) {
+                        if (index >= sortedTusVerileri.length) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            color: index % 2 == 0 ? AppColors.surface : AppColors.primary.withOpacity(0.13),
+                            child: buildRow(List.generate(10, (i) => buildCell('', [kurumWidth, bransWidth, smallWidth, smallWidth, smallWidth, smallWidth, smallWidth, smallWidth, smallWidth, ozelWidth][i]))),
+                          );
+                        }
+                        final v = sortedTusVerileri[index];
+                        final tusKurumId = v.kurumId is int ? v.kurumId : int.tryParse(v.kurumId.toString());
+                        final kurumAdi = kurumIdToAdi[tusKurumId] ?? '-';
+                        final bransAdi = bransIdToAdi[v.bransId] ?? '-';
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          color: index % 2 == 0
+                              ? AppColors.surface
+                              : AppColors.primary.withOpacity(0.13),
+                          child: buildRow([
+                            buildCell(kurumAdi, kurumWidth),
+                            buildCell(bransAdi, bransWidth),
+                            buildCell(v.kontenjanSayisi?.toString() ?? '-', smallWidth, center: true),
+                            buildCell(v.kontenjanTuru, smallWidth, center: true),
+                            buildCell(v.puanTuru, smallWidth, center: true),
+                            buildCell(v.tabanPuan?.toStringAsFixed(2) ?? '-', smallWidth, center: true),
+                            buildCell(v.yerlesenSayisi?.toString() ?? '-', smallWidth, center: true),
+                            buildCell(v.bosKalanSayisi?.toString() ?? '-', smallWidth, center: true),
+                            buildCell(v.tavanPuan?.toStringAsFixed(2) ?? '-', smallWidth, center: true),
+                            buildCell(v.ozelKosul ?? '-', ozelWidth, isOzel: true),
+                          ]),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Bağlı Kuruluş', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Min Puan', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Max Puan', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            ),
-          ],
+          ),
         ),
-        ...allKurumlar.map((h) {
-          final puan = hastanePuanlar.firstWhere(
-            (p) => (p["hastane"]?.toString().toLowerCase() ?? "").contains((h["kurum"] ?? "").toLowerCase()),
-            orElse: () => {},
-          );
-          return TableRow(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text(h["kurum"] ?? '-', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text(h["kurulus"] ?? h["fakulte"] ?? '-', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text(puan.isNotEmpty ? (puan["tabanPuan"]?.toString() ?? '-') : '-', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text(puan.isNotEmpty ? (puan["tavanPuan"]?.toString() ?? '-') : '-', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-              ),
-            ],
-          );
-        }),
-      ],
+      ),
     );
   }
 } 

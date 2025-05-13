@@ -4,7 +4,6 @@ import 'package:tus/features/tus_scores/domain/entities/department.dart';
 import 'package:tus/features/tus_scores/domain/entities/department_score.dart';
 import 'package:tus/features/tus_scores/domain/repositories/tus_scores_repository.dart';
 import 'package:tus/features/tus_scores/domain/services/comparison_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:tus/core/error/failures.dart';
 import 'package:tus/features/tus_scores/domain/services/sync_service.dart';
@@ -15,17 +14,14 @@ class SyncServiceImpl implements SyncService {
   final TusScoresRepository _repository;
   final Database _database;
   final Connectivity _connectivity;
-  final FirebaseFirestore _firestore;
 
   SyncServiceImpl({
     required TusScoresRepository repository,
     required Database database,
     required Connectivity connectivity,
-    required FirebaseFirestore firestore,
   })  : _repository = repository,
         _database = database,
-        _connectivity = connectivity,
-        _firestore = firestore;
+        _connectivity = connectivity;
 
   @override
   Future<void> syncData() async {
@@ -33,52 +29,31 @@ class SyncServiceImpl implements SyncService {
     if (connectivityResult == ConnectivityResult.none) {
       throw Exception('No internet connection');
     }
-
     await syncDepartments();
     await _optimizeStorage();
   }
 
   @override
   Future<void> syncDepartments() async {
+    // Supabase ile senkronizasyon kodu eklenebilir.
+    // Şimdilik sadece local işlemler.
     final departments = await _repository.getDepartments(const FilterParams());
     departments.fold(
       (failure) => throw Exception('Failed to get departments: $failure'),
       (departments) async {
-        final batch = _firestore.batch();
-        for (final department in departments) {
-          final docRef = _firestore.collection('departments').doc(department.id);
-          batch.set(docRef, {
-            'institution': department.institution,
-            'department': department.department,
-            'type': department.type,
-            'year': department.year,
-            'quota': department.quota,
-            'score': department.score,
-            'ranking': department.ranking,
-            'is_favorite': department.isFavorite,
-          });
-        }
-        await batch.commit();
+        // Supabase ile sync işlemleri burada yapılabilir.
       },
     );
   }
 
   @override
   Future<void> syncDepartment(String id) async {
+    // Supabase ile senkronizasyon kodu eklenebilir.
     final department = await _repository.getDepartmentById(id);
     department.fold(
       (failure) => throw Exception('Failed to get department: $failure'),
       (department) async {
-        await _firestore.collection('departments').doc(id).set({
-          'institution': department.institution,
-          'department': department.department,
-          'type': department.type,
-          'year': department.year,
-          'quota': department.quota,
-          'score': department.score,
-          'ranking': department.ranking,
-          'is_favorite': department.isFavorite,
-        });
+        // Supabase ile sync işlemleri burada yapılabilir.
       },
     );
   }
@@ -97,7 +72,6 @@ class SyncServiceImpl implements SyncService {
         whereArgs: [data['id']],
       );
     }
-
     // Vacuum the database
     await _database.execute('VACUUM');
   }
@@ -111,7 +85,6 @@ class SyncServiceImpl implements SyncService {
       where: 'lastSynced < ?',
       whereArgs: [oneMonthAgo.toIso8601String()],
     );
-
     // Vacuum database
     await _database.execute('VACUUM');
   }
@@ -120,10 +93,8 @@ class SyncServiceImpl implements SyncService {
   Future<void> resolveConflicts() async {
     // Get all local data
     final localDepartments = await _getLocalDepartments();
-    
     // Get remote data
     final remoteDepartments = await _repository.getDepartments(const FilterParams());
-    
     remoteDepartments.fold(
       (failure) => throw Exception('Failed to resolve conflicts'),
       (remoteDepartments) async {
@@ -133,7 +104,6 @@ class SyncServiceImpl implements SyncService {
             (d) => d.id == local.id,
             orElse: () => local,
           );
-          
           if (remote != local) {
             // Update local with remote data
             await _database.update(

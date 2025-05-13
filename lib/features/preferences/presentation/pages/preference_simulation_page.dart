@@ -26,7 +26,7 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
   String? _selectedAffiliatedFaculty;
   final TextEditingController _scoreController = TextEditingController();
   final TextEditingController _rankController = TextEditingController();
-  Map<String, dynamic>? tusData;
+  List<Map<String, dynamic>>? tusData;
 
   @override
   void initState() {
@@ -46,38 +46,38 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
 
     // Branş listesi
     final List<String> allBranches = [
-      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
-      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
-      ...List<String>.from(tusData!["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+      ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+      ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+      ...List<String>.from(tusData![0]["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
     ];
 
     // Şehir listesi (üniversite ve hastane şehirlerinin birleşimi, tekrarları kaldır)
     final Set<String> allCities = {
-      ...tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"].map<String>((u) => u["sehir"] as String),
-      ...tusData!["eahVeSehirHastaneleriOrnekler"].map<String>((h) => h["il"] as String),
+      ...tusData![0]["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"].map<String>((u) => u["sehir"] as String),
+      ...tusData![0]["eahVeSehirHastaneleriOrnekler"].map<String>((h) => h["il"] as String),
     };
 
     // Seçili kurum türüne göre şehirler
     List<String> filteredCities = [];
     if (_selectedInstitutionType == 'universite') {
-      filteredCities = tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]
+      filteredCities = tusData![0]["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]
         .map<String>((u) => u["sehir"] as String).toSet().toList();
     } else if (_selectedInstitutionType == 'eah') {
-      filteredCities = tusData!["eahVeSehirHastaneleriOrnekler"]
+      filteredCities = tusData![0]["eahVeSehirHastaneleriOrnekler"]
         .map<String>((h) => h["il"] as String).toSet().toList();
     }
 
     // Seçili şehir ve kurum türüne göre üniversiteler
     List<Map<String, dynamic>> filteredUniversities = [];
     if (_selectedInstitutionType == 'universite' && _selectedCity != null) {
-      filteredUniversities = tusData!["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]
+      filteredUniversities = tusData![0]["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]
         .where((u) => u["sehir"] == _selectedCity).toList().cast<Map<String, dynamic>>();
     }
 
     // Seçili şehir ve kurum türüne göre hastaneler
     List<Map<String, dynamic>> filteredHospitals = [];
     if (_selectedInstitutionType == 'eah' && _selectedCity != null) {
-      filteredHospitals = tusData!["eahVeSehirHastaneleriOrnekler"]
+      filteredHospitals = tusData![0]["eahVeSehirHastaneleriOrnekler"]
         .where((h) => h["il"] == _selectedCity).toList().cast<Map<String, dynamic>>();
     }
 
@@ -104,7 +104,7 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
     // Seçili branşa göre eğitim süresi
     String? selectedBranchEducation;
     if (_selectedBranch != null) {
-      final egitim = (tusData!["uzmanlikDallariVeEgitimSureleri"] as List)
+      final egitim = (tusData![0]["uzmanlikDallariVeEgitimSureleri"] as List)
           .firstWhere((e) => e["uzmanlikDali"] == _selectedBranch, orElse: () => null);
       selectedBranchEducation = egitim?['egitimSuresiYil'];
     }
@@ -112,7 +112,7 @@ class _PreferenceSimulationPageState extends State<PreferenceSimulationPage> {
     // Seçili branşa göre dönemsel kontenjanlar
     Map<String, int> selectedBranchQuotas = {};
     if (_selectedBranch != null) {
-      final bransObj = (tusData!["secilmisUzmanlikDallariKontenjanDegisimleri"] as List)
+      final bransObj = (tusData![0]["secilmisUzmanlikDallariKontenjanDegisimleri"] as List)
           .firstWhere((e) => e["brans"] == _selectedBranch, orElse: () => null);
       if (bransObj != null) {
         bransObj.forEach((key, value) {

@@ -78,29 +78,29 @@ class DepartmentServiceImpl implements DepartmentService {
   Future<List<String>> getAllBranches() async {
     final tusData = await TusDataLoader.loadTusData();
     return [
-      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
-      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
-      ...List<String>.from(tusData["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
+      ...List<String>.from(tusData[0]["aktifTusUzmanlikDallariListesi"]["dahiliTipBilimleri"]),
+      ...List<String>.from(tusData[0]["aktifTusUzmanlikDallariListesi"]["cerrahiTipBilimleri"]),
+      ...List<String>.from(tusData[0]["aktifTusUzmanlikDallariListesi"]["temelTipBilimleri"]),
     ];
   }
 
   @override
   Future<List<dynamic>> getQuotaChangesForBranch(String branch) async {
     final tusData = await TusDataLoader.loadTusData();
-    final List<dynamic> changes = tusData["secilmisUzmanlikDallariKontenjanDegisimleri"];
+    final List<dynamic> changes = List<dynamic>.from(tusData[0]["secilmisUzmanlikDallariKontenjanDegisimleri"]);
     return changes.where((e) => e["brans"] == branch).toList();
   }
 
   @override
   Future<List<dynamic>> getUniversities() async {
     final tusData = await TusDataLoader.loadTusData();
-    return tusData["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"];
+    return List<Map<String, dynamic>>.from(tusData[0]["tusEgitimiVerenUniversiteTipFakulteleriOrnekler"]);
   }
 
   @override
   Future<List<dynamic>> getHospitals() async {
     final tusData = await TusDataLoader.loadTusData();
-    return tusData["eahVeSehirHastaneleriOrnekler"];
+    return List<Map<String, dynamic>>.from(tusData[0]["eahVeSehirHastaneleriOrnekler"]);
   }
 }
 
